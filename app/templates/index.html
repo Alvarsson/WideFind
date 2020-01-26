@@ -1,0 +1,45 @@
+{%extends "public_template.html" %}
+
+
+{%block main %}
+
+<style type="text/css">
+#container {
+  max-width: 400px;
+  height: 400px;
+  margin: auto;
+}
+</style>
+<div id="container"></div>
+<script src="../static/js/sigma.parsers.json.min.js"></script>
+<script src="../static/js/sigma.min.js"></script>
+<script src="../static/js/sigma.layout.forceAtlas2.min.js"></script>
+
+<script>
+  sigma.parser.json( "{{ url_for('static', filename='network.json') }}", {
+    container: 'container',
+    settings: {
+      defaultNodeColor: '#ec5148'
+    }
+  });
+</script>
+<!--
+
+s = new sigma ({
+  graph: node_data,
+  container: 'container',
+  renderer: {
+    container: document.getElementById('container'),
+    type: 'canvas'
+  },
+  settings: {
+    defaultNodeColor: '#ec5148',
+    minNodeSize: 8,
+    maxNodeSize: 16
+  }
+});
+
+-->
+
+
+{% endblock %}
