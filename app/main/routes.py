@@ -16,10 +16,10 @@ def load_json():
 
 @bp.route('/')
 def index():
-	node_data = load_json()
-	print("hej")
-	print(node_data)
-	return render_template("index.html", node_data=node_data)
+	#node_data = load_json()
+	#print("hej")
+	#print(node_data)
+	return render_template("index.html")
 
 
 @bp.route('/network')
