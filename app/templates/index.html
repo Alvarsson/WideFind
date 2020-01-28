@@ -1,21 +1,13 @@
 
-<!DOCTYPE html>
-<html lang="en">
+{%extends "public_template.html" %}
 
-<head>
-<style type="text/css">
-  #container {
-    max-width: 800px;
-    height: 500px;
-    margin: auto;
-  }
-  </style>
-</head>
-<body>
+
+{%block main %}
+
+<div class="mx-auto "></div>
 <div id="container"></div>
 <script src='{{ url_for("static", filename="js/sigma.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
-
 
 <script>
   sigma.parsers.json( '{{ url_for("static", filename="network.json") }}', {
@@ -25,6 +17,7 @@
     }
   });
 </script>
-</body>
-</html>
+
+{% endblock %}
+
 
