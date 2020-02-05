@@ -1,0 +1,16 @@
+type Gateway {
+  id: ID!
+  x: Int
+  y: Int
+  z: Int
+  ip_address: String
+  mac_address: String
+  comment: String
+  active: Boolean
+
+  neighbors: [Gateway] @relation(name: "LINKED_TO", direction: "BOTH")
+}
+
+type Tag {
+  active: Boolean
+}
