@@ -16,7 +16,7 @@ def index():
 	#node_data = load_json()
 	#print("hej")
 	#print(node_data)
-	return render_template("index.html")
+	return render_template("testfil.html")
 
 
 @bp.route('/network')

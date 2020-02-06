@@ -1,0 +1,146 @@
+{%extends "public_template.html" %}
+
+
+{%block main %}
+<script src='{{ url_for("static", filename="js/sigma.min.js") }}'></script>
+<script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
+<script src='{{ url_for("static", filename="js/sigma.plugins.dragNodes.js") }}'></script>
+<script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script>
+
+<div>
+    <button onclick="AddNode()"> Add node</button>
+</div>
+<div>
+    <!-- testing function -->
+    <button onclick="test()"> test</button>
+</div>
+<div> <!-- ONSUBMIT send: (fromNode, toNode) Not complete -->
+    <input type="text" maxlength="2" name="value" id="value" />
+    <input type="button" value="submit" onclick="AddEdge()" />
+</div>
+<div id="container">
+
+<style>
+ #graph-container {
+    max-width: 800px;
+    height: 500px;
+    margin: auto;
+ }
+</style>
+
+<div id="graph-container"></div>
+</div>
+
+<script>
+var nodeCount = 0,
+    edgeCount = 0,
+    s,
+    maxNodes = 20,
+    maxEdges = 50,
+    g = {
+        nodes: [],
+        edges: []
+    }
+
+s = new sigma({
+    graph: g,
+    container: 'graph-container',
+    renderers:[ {
+        container: document.getElementById('graph-container'),
+        type: 'canvas'
+    }],
+    settings: {
+        
+    }
+});
+
+// ---------Testing function only---------
+function test(){
+    alert("s"+ s + "g" + g);
+}
+// ---------Testing function only---------
+function update(){
+    s.graph.nodes().forEach(function(n){
+        n.size = 34,
+        n.color = '#000'
+    });
+    s.refresh();
+}
+
+//Function to add node to graph
+function AddNode() {
+    g.nodes.push(s.graph.addNode({
+        id: 'n' + nodeCount,
+        label: 'Node ' + nodeCount,
+        x: nodeCount,
+        y: 5,
+        size: 8,
+        color: '#000000'
+    }));
+    nodeCount = nodeCount + 1;
+    
+    s.refresh();
+}
+//Function to add edge between nodes on graph. 
+//TODO: 
+// Fix parsing of incoming node-id from html input
+//
+function AddEdge() {
+    var fromNode = document.getElementById('value').value[0];
+    var toNode = document.getElementById('value').value[1];
+    g.edges.push(s.graph.addEdge({
+        id: 'e' + edgeCount,
+        source: 'n' + fromNode,
+        target: 'n' + toNode,
+        size: 8,
+        color: '#FF0000'
+    }));
+    edgeCount = edgeCount + 1;
+    s.refresh();
+}
+function RemoveNode() {
+
+
+}
+
+
+// Initialize the dragNodes plugin:
+var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
+
+dragListener.bind('startdrag', function(event) {
+console.log(event);
+});
+dragListener.bind('drag', function(event) {
+console.log(event);
+});
+dragListener.bind('drop', function(event) {
+console.log(event);
+});
+dragListener.bind('dragend', function(event) {
+console.log(event);
+});
+
+// -------------------TESTING ONLY--------------------------
+/* for (i = 0; i < N; i++)
+  g.nodes.push({
+    id: 'n' + i,
+    label: 'Node ' + i,
+    x: Math.random(),
+    y: Math.random(),
+    size: Math.random(),
+    color: '#666'
+  });
+
+for (i = 0; i < E; i++)
+  g.edges.push({
+    id: 'e' + i,
+    source: 'n' + (Math.random() * N | 0),
+    target: 'n' + (Math.random() * N | 0),
+    size: Math.random(),
+    color: '#ccc'
+  });
+ */
+
+</script>
+
+{% endblock %}
