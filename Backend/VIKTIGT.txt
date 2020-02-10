@@ -1,0 +1,10 @@
+1. Se till att neo4j informationen stämmer med informationen i (api/.env).
+2. Ladda ner plugin till neo4j som kallas APOC (tryck på din Graph -> Manage -> Plugins)
+
+För att starta backend:
+	gå till /api
+	skriv "npm start" och enter.
+	
+Om "npm" inte funkar så se till att node är installerat och att din PATH variabel är korrekt.
+
+Exempel på hur man kan skicka queries och mutations finns i exempel.py!

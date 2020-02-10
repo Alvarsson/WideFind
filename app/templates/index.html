@@ -1,5 +1,6 @@
 {%extends "public_template.html" %}
 
+<<<<<<< HEAD
 
 {%block main %}
 <script src='{{ url_for("static", filename="js/sigma.min.js") }}'></script>
@@ -31,6 +32,18 @@
 <div id="graph-container"></div>
 </div>
 
+=======
+{%extends "public_template.html" %}
+
+
+{%block main %}
+
+<div class="mx-auto "></div>
+<div id="container"></div>
+<script src='{{ url_for("static", filename="js/sigma.min.js") }}'></script>
+<script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
+
+>>>>>>> beb8cac33ec40335bd46099a9cfba18293cf3210
 <script>
 var nodeCount = 0,
     edgeCount = 0,
@@ -144,4 +157,8 @@ for (i = 0; i < E; i++)
 </script>
 
 {% endblock %}
+<<<<<<< HEAD
+=======
+
+>>>>>>> beb8cac33ec40335bd46099a9cfba18293cf3210
 

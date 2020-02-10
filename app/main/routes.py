@@ -2,9 +2,6 @@ from flask import render_template, url_for, Flask
 from app.main import main_bp as bp
 import requests
 import json
-import networkx as nx
-from networkx.readwrite import json_graph
-import matplotlib.pyplot as plt
 import os
 	
 def load_json():
