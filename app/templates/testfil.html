@@ -15,9 +15,9 @@
     <button onclick="test()"> test</button>
 </div>
 <div> <!-- ONSUBMIT send: (fromNode, toNode) Not complete -->
-    <input type="text" maxlength="2" name="value" id="value" />
-    <input type="text" maxlength="2" name="value2" id="value2"/>
-    <input type="button" value="submit" onclick="AddEdge()" required />
+    <input type="text" maxlength="2" name="value" id="value" placeholder="From node" required />
+    <input type="text" maxlength="2" name="value" id="value2" placeholder="To node" required/>
+    <input type="button" value="submit" onclick="AddEdge()" />
 </div>
 <div id="container">
 
@@ -88,7 +88,7 @@ function AddNode() {
 //
 function AddEdge() {
     var fromNode = document.getElementById('value').value[0];
-    var toNode = document.getElementById('value2').value2[0];
+    var toNode = document.getElementById('value2').value[0];
     g.edges.push(s.graph.addEdge({
         id: 'e' + edgeCount,
         source: 'n' + fromNode,
