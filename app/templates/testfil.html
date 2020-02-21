@@ -6,7 +6,9 @@
 <script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.plugins.dragNodes.js") }}'></script>
 <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script>
-
+<!-- <script src='{{ url_for("static", filename="js/renderers/settings.js") }}'></script> -->
+<script src='{{ url_for("static", filename="js/renderers/sigma.canvas.edges.labels.def.js") }}'></script>
+<!-- <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script> -->
 <div>
     <button onclick="AddNode()"> Add node</button>
 </div>
@@ -51,7 +53,14 @@ s = new sigma({
         type: 'canvas'
     }],
     settings: {
-        
+        doubleClickEnabled: false,
+        minEdgeSize: 0.5,
+        maxEdgeSize: 4,
+        enableEdgeHovering: true,
+        edgeHoverColor: 'edge',
+        defaultEdgeHoverColor: '#000',
+        edgeHoverSizeRatio: 1,
+        edgeHoverExtremities: true,
     }
 });
 
@@ -75,8 +84,9 @@ function AddNode() {
         label: 'Node ' + nodeCount,
         x: nodeCount,
         y: 5,
-        size: 8,
-        color: '#000000'
+        size: '8',
+        color: '#666',
+
     }));
     nodeCount = nodeCount + 1;
     
@@ -93,8 +103,9 @@ function AddEdge() {
         id: 'e' + edgeCount,
         source: 'n' + fromNode,
         target: 'n' + toNode,
-        size: 8,
-        color: '#FF0000'
+        size: '8',
+        color: '#ccc',
+        hover_color: '#000'
     }));
     edgeCount = edgeCount + 1;
     s.refresh();
@@ -103,7 +114,6 @@ function RemoveNode() {
 
 
 }
-
 
 // Initialize the dragNodes plugin:
 var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
@@ -121,6 +131,19 @@ dragListener.bind('dragend', function(event) {
 console.log(event);
 });
 
+s.bind('clickNode', function(e) {
+  console.log(e.type, e.data.node.label, e.data.node.color);
+});
+s.bind('overEdge outEdge clickEdge doubleClickEdge rightClickEdge', function(e) {
+  console.log(e.type, e.data.edge, e.data.captor);
+});
+s.bind('clickStage', function(e) {
+  console.log(e.type, e.data.captor);
+});
+s.bind('doubleClickStage rightClickStage', function(e) {
+  console.log(e.type, e.data.captor);
+}); 
+ 
 // -------------------TESTING ONLY--------------------------
 /* for (i = 0; i < N; i++)
   g.nodes.push({
