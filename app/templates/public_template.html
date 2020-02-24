@@ -4,49 +4,258 @@
 <head>
 
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+  
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <title>{% block title %}{% endblock %}</title>
   
+  <script>
+  // För att ändra namn på händelsebaren.//
+  function changeName(a){
+	document.getElementById("events").innerHTML = a;
+  }
+  // För att ändra namn på enhetsbaren.
+  function changeName2(a){
+	document.getElementById("units").innerHTML = a;
+  }
+  
+  //array för events.
+  var events = [];
+  //array för units
+  var units = [1,2,3];
+  
+  var count = 0;
+  
+  //Lägger till en div för en gateway när knappen "Add node" klickas, jag ger den ett tillfälligt id så jag kan ta bort dem med "Remove node", detta id ska bytas till det slumpmässiga som genereras i backend.
+  function addNode(){
+	var newDiv = document.createElement("div");	
+	newDiv.onclick = function(){ document.getElementById("infoId").innerHTML = textID; document.getElementById("infoIp").innerHTML = textIP; document.getElementById("infoMac").innerHTML = textMAC; };
+	var currentDiv = document.getElementById("unitHolder");
+	currentDiv.appendChild(newDiv);
+	
+	document.getElementById("unitHolder");
+	
+	var id = count;
+	var ip = "unavailable";
+	var mac = "unavailable";
+	var textID = "ID: " + id;
+	var textIP = "IP: " + ip;
+	var textMAC = "MAC: " + mac;
+	
+	//dumt sätt att dela lägga till en newline i unit diven, men lyckades inte komma på ett bättre sätt (än)
+	var para1 = document.createElement("p");
+	var para2 = document.createElement("p");
+	var para3 = document.createElement("p");
+	var newID = document.createTextNode(textID);
+	var newIP = document.createTextNode(textIP); 
+	var newMAC = document.createTextNode(textMAC); 
+	para1.appendChild(newID);
+	para2.appendChild(newIP);
+	para3.appendChild(newMAC);
+	newDiv.appendChild(para1);
+	newDiv.appendChild(para2);
+	newDiv.appendChild(para3);
+	
+	count = count + 1;
+  }
+  
+  function removeNode(){
+	var removeNode = document.getElementById("");
+  }
+  </script>
+
+
+  <style>
+  #container {
+    height: 100%;
+    margin: auto;
+} 
+
+
+#wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+/*barHolder tar hand om css för både händelsebaren och enhetsbaren*/
+#eventHolder {
+	height: 960px;
+	background-color: #343a40;
+	overflow-y: scroll;
+	color: white;
+}
+#eventHolder div {
+	height: 100px;
+	width: 100%;
+	background-color: #272c30;
+	margin-top: 5px;
+} 
+#unitHolder {
+	height: 960px;
+	background-color: #343a40;
+	overflow-y: scroll;
+	color: white;
+}
+#unitHolder div {
+	height: 100px;
+	width: 100%;
+	background-color: #272c30;
+	margin-top: 5px;
+} 
+#unitHolder div:hover {
+	background-color: #171a1c;
+}
+
+/*infoBar*/
+#infoBar {
+	width: 100%;
+	height: 150px;
+	background-color: #272c30;
+	color: white;
+}
+  
+/* Kod för drop down menyn, dett kan göras med bootstrap men hade problem med att göra kanterna på knappen "kantiga" (dvs de var avrundade, vilket såg ganska fult ut) */
+.dropbtn {
+  background-color: #272c30;
+  color: white;
+  padding: 16px;
+  font-size: 20px;
+  border: none;
+  width: 453px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:active .dropdown-content {display: block;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #171a1c;}
+
+.main {
+  border-style: solid;
+}
+
+  </style>
 </head>
 
-
 <body>
+
   <!--<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
   
-  
-<div class="row">
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark md-auto">
+      <a class="navbar-brand" href="#">Admin Login</a>
+          ...
+  </nav>
 
-<p>TJOSANs</p>
-  <p>hej hej ehej</p>
 
-  <!-- /#wrapper -->
-</span>
-</div>
-<div class="row">
-<p>HEJSAN IGEN</p>
-<p>hej hej ehej</p>
-<p>hej hej ehej</p>
-<p>hej hej ehej</p>
-<div class="d-flex" id="wrapper">
-    <!-- NODE GRAPH -->
-    <main>
-      {% block main %}{% endblock %}
-    </main>
-    <!-- /#NODE GRAPH END-->
+  <div class="row" style="height: 100%">
+    <div class="col-md-3 d-inline">
+		<div class="dropdown">
+		  <button id="events" class="dropbtn">Nyaste</button>
+		  <div class="dropdown-content">
+			<a onclick="changeName('Gateways')">Gateways</a>
+			<a onclick="changeName('Edges')">Edges</a>
+			<a onclick="changeName('Tags')">Tags</a>
+			<a onclick="changeName('Nyaste')">Nyaste</a>
+		  </div>
+		</div>
+		<div id="eventHolder">
+		
+		</div>
+    </div>
+    <div class="col-md-6 d-inline height='md-auto'" style="height: 100%">
+            <!-- buttons -->
+            <div class="row">
+              <!-- button 1 -->
+              <div class="col" style="text-align: center; margin: 10px;">
+                <button type="button" onClick="addNode()" class="btn btn-secondary btn-lg">Add Node</button>
+              </div>
+              <!-- button 2 -->
+              <div class="col" style="text-align: center; margin: 10px;">
+                <button type="button" class="btn btn-secondary btn-lg">Remove Node</button> 
+              </div>
+              <!-- button 3 -->
+              <div class="col" style="text-align: center; margin: 10px;">
+                <button type="button" class="btn btn-secondary btn-lg">Add Connection</button>
+              </div>
+              <!-- button 4 -->
+              <div class="col" style="text-align: center; margin: 10px;">
+                <button type="button" class="btn btn-secondary btn-lg">Remove Connection</button>
+              </div>
+            </div>
+            <!-- nodemap -->
+            <div class="row">
+              <div class="d-flex" id="wrapper">
+                <!-- NODE GRAPH -->
+                <main class="main">
+                  {% block main %}{% endblock %}
+                </main>
+                <!-- /#NODE GRAPH END-->
+              </div>
+            </div>
+            <!-- text input field -->
+            <div class="row">
+                <div id="infoBar">
+					<p id="infoId">ID:</p>
+					<p id="infoIp">IP:</p>
+					<p id="infoMac">MAC:</p>
+					<p id="infoKommentar">Kommentar:</p>
+                </div>
+            </div>
+    </div>
+      <div class="col-md-3 d-inline">
+        <div class="dropdown">
+		  <button  id="units" class="dropbtn">Gateways</button>
+		  <div class="dropdown-content">
+			<a onclick="changeName2('Gateways')">Gateways</a>
+			<a onclick="changeName2('Edges')">Edges</a>
+			<a onclick="changeName2('Tags')">Tags</a>
+		  </div>
+		</div>
+		<div id="unitHolder">
+			
+		</div>
+      </div>
   </div>
-</div>
+
+  </div>
+
+ 
+
+
   <!-- Bootstrap core JavaScript -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
   <!-- Menu Toggle Script -->
   
 
 </body>
-
 </html>
-

@@ -3,19 +3,17 @@ from app.main import main_bp as bp
 import requests
 import json
 import os
+import pandas as pd
 	
 def load_json():
-	filename = os.path.join(os.path.dirname(__file__), '../static', 'network.json')
-	print(filename)
-	with open(filename) as node_graph:
-		data = json.load(node_graph)
+	query = """query {
+		
+	} """
 	return data
 
 @bp.route('/')
 def index():
-	#node_data = load_json()
-	#print("hej")
-	#print(node_data)
+	
 	return render_template("testfil.html")
 
 

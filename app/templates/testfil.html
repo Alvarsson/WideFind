@@ -1,4 +1,5 @@
-{%extends "public_template.html" %}
+
+{%extends "test_template.html" %}
 
 
 {%block main %}
@@ -6,7 +7,9 @@
 <script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.plugins.dragNodes.js") }}'></script>
 <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script>
-
+<!-- <script src='{{ url_for("static", filename="js/renderers/settings.js") }}'></script> -->
+<script src='{{ url_for("static", filename="js/renderers/sigma.canvas.edges.labels.def.js") }}'></script>
+<!-- <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script> -->
 <div>
     <button onclick="AddNode()"> Add node</button>
 </div>
@@ -15,14 +18,15 @@
     <button onclick="test()"> test</button>
 </div>
 <div> <!-- ONSUBMIT send: (fromNode, toNode) Not complete -->
-    <input type="text" maxlength="2" name="value" id="value" />
+    <input type="text" maxlength="2" name="value" id="value" placeholder="From node" required />
+    <input type="text" maxlength="2" name="value" id="value2" placeholder="To node" required/>
     <input type="button" value="submit" onclick="AddEdge()" />
 </div>
 <div id="container">
 
 <style>
  #graph-container {
-    max-width: 800px;
+    width:100vh;
     height: 500px;
     margin: auto;
  }
@@ -50,7 +54,14 @@ s = new sigma({
         type: 'canvas'
     }],
     settings: {
-        
+        doubleClickEnabled: false,
+        minEdgeSize: 0.5,
+        maxEdgeSize: 4,
+        enableEdgeHovering: true,
+        edgeHoverColor: 'edge',
+        defaultEdgeHoverColor: '#000',
+        edgeHoverSizeRatio: 1,
+        edgeHoverExtremities: true,
     }
 });
 
@@ -74,8 +85,9 @@ function AddNode() {
         label: 'Node ' + nodeCount,
         x: nodeCount,
         y: 5,
-        size: 8,
-        color: '#000000'
+        size: '8',
+        color: '#666',
+
     }));
     nodeCount = nodeCount + 1;
     
@@ -87,13 +99,14 @@ function AddNode() {
 //
 function AddEdge() {
     var fromNode = document.getElementById('value').value[0];
-    var toNode = document.getElementById('value').value[1];
+    var toNode = document.getElementById('value2').value[0];
     g.edges.push(s.graph.addEdge({
         id: 'e' + edgeCount,
         source: 'n' + fromNode,
         target: 'n' + toNode,
-        size: 8,
-        color: '#FF0000'
+        size: '8',
+        color: '#ccc',
+        hover_color: '#000'
     }));
     edgeCount = edgeCount + 1;
     s.refresh();
@@ -102,7 +115,6 @@ function RemoveNode() {
 
 
 }
-
 
 // Initialize the dragNodes plugin:
 var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
@@ -120,6 +132,19 @@ dragListener.bind('dragend', function(event) {
 console.log(event);
 });
 
+s.bind('clickNode', function(e) {
+  console.log(e.type, e.data.node.label, e.data.node.color);
+});
+s.bind('overEdge outEdge clickEdge doubleClickEdge rightClickEdge', function(e) {
+  console.log(e.type, e.data.edge, e.data.captor);
+});
+s.bind('clickStage', function(e) {
+  console.log(e.type, e.data.captor);
+});
+s.bind('doubleClickStage rightClickStage', function(e) {
+  console.log(e.type, e.data.captor);
+}); 
+ 
 // -------------------TESTING ONLY--------------------------
 /* for (i = 0; i < N; i++)
   g.nodes.push({
@@ -130,7 +155,6 @@ console.log(event);
     size: Math.random(),
     color: '#666'
   });
-
 for (i = 0; i < E; i++)
   g.edges.push({
     id: 'e' + i,
