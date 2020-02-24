@@ -1,5 +1,6 @@
 type Gateway {
   id: ID!
+  
   x: Int
   y: Int
   z: Int
