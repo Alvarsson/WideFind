@@ -24,7 +24,7 @@
 	document.getElementById("units").innerHTML = a;
   }
   
-  //array för events
+  //array för events.
   var events = [];
   //array för units
   var units = [1,2,3];
@@ -157,6 +157,11 @@
 .dropdown:hover .dropdown-content {display: block;}
 
 .dropdown:hover .dropbtn {background-color: #171a1c;}
+
+.main {
+  border-style: solid;
+}
+
   </style>
 </head>
 
@@ -209,7 +214,7 @@
             <div class="row">
               <div class="d-flex" id="wrapper">
                 <!-- NODE GRAPH -->
-                <main>
+                <main class="main">
                   {% block main %}{% endblock %}
                 </main>
                 <!-- /#NODE GRAPH END-->
@@ -254,4 +259,3 @@
 
 </body>
 </html>
-
