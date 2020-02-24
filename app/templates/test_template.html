@@ -24,17 +24,19 @@
             </div>
 
             <div class="col-md">
-
+                <script src="testfil.html" type="text/html"></script>
                 <div class="row row-cols-3 p-3 mt-1 ml-0 mr-0">
                     <div class="col">
                         <center> 
-                        <button type="button" class="btn btn-success">Add Node</button>
+                        <button type="button" class="btn btn-success" onclick="AddNode()">Add Node</button>
                         </center>
                     </div>
                         
                     <div class="col">
                         <center> 
-                        <button type="button" class="btn btn-info">Add Edge</button>
+                            <input type="text" maxlength="2" name="value" id="value" placeholder="From node" required />
+                            <input type="text" maxlength="2" name="value" id="value2" placeholder="To node" required/>
+                            <button type="button" value="submit" class="btn btn-primary" onclick="AddEdge()">Add edge</button>
                         </center>
                     </div>
                     <div class="col">
@@ -45,7 +47,7 @@
                 </div>
 
                 <div class="row p-3 h-75 mt-1  bg-light" style="border-top: solid;border-bottom: solid;border-width: 1px">
-                    <main>
+                    <main class="w-100">
                             {% block main %}{% endblock %}
                     </main>
                 </div>
@@ -61,7 +63,9 @@
                     Objects
                 </div>
                 <div class="col-md-2 p-3 text-white">
-                    HÖGER UNDER
+                    <ul class="">
+
+                    </ul>
                 </div>
             </div>
             
