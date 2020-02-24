@@ -1,3 +1,13 @@
+from flask import render_template, url_for, Flask
+from app.main import main_bp as bp
+import requests
+import json
+import os
+import pandas as pd
+
+port = 4000
+url = "http://127.0.0.1:" + str(port)
+
 def load_gateways():
 	query = """ query { Gateway {
 			id
@@ -38,3 +48,27 @@ def add_gateway( x, y, z, active, ip):
 	parameters = {"query": mutation}
 	result = requests.post(url, json=parameters)
 	return result.text
+
+
+def add_connection(fromID, toID):
+	mutation = """mutation {AddGatewayNeighbors(from: {id: %d}, to: {id: %d}) {
+		from {id}
+    	to {id}
+  		}
+	}""" %(fromID,toID)
+	parameters = {"query": mutation}
+	result = requests.post(url, json=parameters)
+	return result.text
+
+
+def delete_connection(fromID, toID):
+	mutation = """mutation {RemoveGatewayNeighbors(from: {id: %d}, 
+                      to: {id: %d}) {
+    	from {id}
+    	to {id}
+		}
+	}"""%(fromID, toID)
+	parameters = {"query": mutation}
+	result = requests.post(url, json=parameters)
+	return result.text
+	

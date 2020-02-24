@@ -4,7 +4,7 @@ import requests
 import json
 import os
 import pandas as pd
-from functions import *
+from app.main.functions import *
 
 port = 4000
 url = "http://127.0.0.1:" + str(port)
@@ -20,11 +20,12 @@ Test_id = "nod"
 
 @bp.route('/')
 def index():
-	load_result = load_gateways()
+	#load_result = load_gateways()
 	print("hej")
-	add_result = add_gateway(x,y,z,active,ip)
+	#add_result = add_gateway(x,y,z,active,ip)
+	delconnection = delete_connection(1,2)
 
-	return render_template("testfil.html", load=load_result)
+	return render_template("testfil.html")
 
 
 @bp.route('/network')
