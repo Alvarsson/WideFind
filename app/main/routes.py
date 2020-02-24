@@ -6,8 +6,6 @@ import os
 import pandas as pd
 from app.main.functions import *
 
-port = 4000
-url = "http://127.0.0.1:" + str(port)
 
 id = "hejsan"
 x = 123
@@ -23,8 +21,7 @@ def index():
 	#load_result = load_gateways()
 	print("hej")
 	#add_result = add_gateway(x,y,z,active,ip)
-	delconnection = delete_connection(1,2)
-
+	conn = add_connection(1,2)
 	return render_template("testfil.html")
 
 

@@ -34,7 +34,7 @@ def delete_gateway(id):
 	parameters = {"query": mutation}
 	result = requests.post(url, json=parameters)
 	return result.text
-    
+
 def add_gateway( x, y, z, active, ip):
 	mutation = """ mutation { CreateGateway(x: %d, y: %d, z: %d, ip_address: "%s", active: %s) {
 			id
@@ -72,3 +72,16 @@ def delete_connection(fromID, toID):
 	result = requests.post(url, json=parameters)
 	return result.text
 	
+def update_gateway(id,x,y,z,ip,comment):
+    mutation = """ mutation { UpdateGateway(id: %s, x: %d, y: %d, z: %d, ip_address "%s", comment: "%s") {
+        id
+        x
+        y
+        z
+        ip_address
+        active
+        comment
+        }
+    } """ % (id,x,y,z,ip,comment)
+
+

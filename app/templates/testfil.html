@@ -10,29 +10,31 @@
 <!-- <script src='{{ url_for("static", filename="js/renderers/settings.js") }}'></script> -->
 <script src='{{ url_for("static", filename="js/renderers/sigma.canvas.edges.labels.def.js") }}'></script>
 <!-- <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script> -->
-<div>
+<!-- <div>
     <button onclick="AddNode()"> Add node</button>
 </div>
 <div>
-    <!-- testing function -->
+    
     <button onclick="test()"> test</button>
 </div>
-<div> <!-- ONSUBMIT send: (fromNode, toNode) Not complete -->
+<div> 
     <input type="text" maxlength="2" name="value" id="value" placeholder="From node" required />
     <input type="text" maxlength="2" name="value" id="value2" placeholder="To node" required/>
     <input type="button" value="submit" onclick="AddEdge()" />
-</div>
-<div id="container">
-
+</div> -->
 <style>
- #graph-container {
-    align-content: center;
-    width: 1100px;
-    height: 700px;
-    margin: auto;
- }
-</style>
-
+    #graph-container {
+       width:100vh;
+       height: 600px;
+       margin: auto;
+    }
+    #container {
+      width: 100%;
+      height: auto;
+      margin: auto;
+    }
+   </style>
+<div id="container">
 <div id="graph-container"></div>
 </div>
 
