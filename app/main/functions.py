@@ -16,13 +16,9 @@ def load_gateways():
 			z
 			ip_address
 			active
-			neighbors {
-				_id
-			}
 		}
 	} """
 	parameters = {"query": query}
-	print(parameters)
 	result = requests.post(url, json=parameters)
 	return result.text
 

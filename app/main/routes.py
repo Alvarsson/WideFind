@@ -16,13 +16,22 @@ mac = "123.123.123.123"
 active = "false"
 Test_id = "nod"
 
+data_array = []
 @bp.route('/')
 def index():
-	#load_result = load_gateways()
+	print("hej")
+	nodeInfo = load_gateways()
+	json_data = json.loads(nodeInfo)
+	json_data = json_data.get("data")
+	json_data = json_data.get("Gateway")
+	json_data = json_data[0]
+	for item in json_data.values():
+		data_array.append(item)
+	print(data_array)
 	print("hej")
 	#add_result = add_gateway(x,y,z,active,ip)
 
-	return render_template("testfil.html")
+	return render_template("testfil.html", data_array=data_array )
 
 
 @bp.route('/network')
