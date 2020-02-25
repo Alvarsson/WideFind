@@ -1,3 +1,6 @@
+.vscode
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -126,10 +129,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-
-# Created by https://www.gitignore.io/api/node
-# Edit at https://www.gitignore.io/?templates=node
-
 ### Node ###
 # Logs
 logs
@@ -171,7 +170,7 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
+Backend/api/node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -196,6 +195,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
+Backend/api/.env
 .env
 .env.test
 
@@ -235,6 +235,3 @@ dist/
 # Temporary folders
 tmp/
 temp/
-
-# End of https://www.gitignore.io/api/node
-
