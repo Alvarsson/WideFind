@@ -6,30 +6,37 @@ import os
 import pandas as pd
 from app.main.functions import *
 
+"""
+TODO: -------Kolla kommentarer i test_template med caps-lock och lös dem.-------
+TODO: fixa removefunktion och koppla knappen
+TODO: Fixa funktion för att para ihop detekterade gateways med inlagda noder, ny view för det?
+TODO: Activity feed, vad ska läggas in där?
+TODO: Informationen av noder måste ju få all data korrekt
+TODO: I activity field, lägg till nod, nog har tagits bort etc. alla event ska dit.
+"""
+
 
 id = "hejsan"
-x = 123
-y = 345
-z = 678
-ip = "0.0.0.1337"
-mac = "123.123.123.123"
-active = "false"
+x = 321
+y = 543
+z = 876
+ip = "0.0.0.1338"
+mac = "321.3213.321.321"
+active = "true"
 Test_id = "nod"
 
-data_array = []
+
+
 @bp.route('/')
 def index():
+	data_array = []
 	print("hej")
-	nodeInfo = load_gateways()
-	json_data = json.loads(nodeInfo)
-	json_data = json_data.get("data")
-	json_data = json_data.get("Gateway")
-	json_data = json_data[0]
-	for item in json_data.values():
-		data_array.append(item)
+	#add_gateway(x,y,z,ip,active)
+	#JA HÄR KOMMER DU BEHÖVA ÄNDRA NÅGOT OCKSÅ VA?
+	data_array = parseToData()
 	print(data_array)
 	print("hej")
-	#add_result = add_gateway(x,y,z,active,ip)
+	
 
 	return render_template("testfil.html", data_array=data_array )
 
