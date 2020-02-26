@@ -36,7 +36,6 @@ def index():
 	data_array = parseToData()
 	print(data_array)
 	print("hej")
-	
 
 	return render_template("testfil.html", data_array=data_array )
 
