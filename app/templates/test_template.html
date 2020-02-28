@@ -47,14 +47,24 @@
                     <div class="col">
                         <!-- INTE ALLS SNYGGT SAMT SÅ FÖRSTÖR DET FÖR SIDANS LAYOUT, DETTA KAN ELSA FIXA TILL! Det finns något som är inlagt med px som måste bort -->
                         <center> 
-                            <input type="text" maxlength="2" name="value" id="value" placeholder="From node" required />
-                            <input type="text" maxlength="2" name="value" id="value2" placeholder="To node" required/>
-                            <button type="button" value="submit" class="btn btn-primary" onclick="AddEdge()">Add edge</button>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" value="submit" class="btn btn-primary" onclick="AddEdge()">Add edge</button>
+                                </div>
+                                <input type="text" name="value" id="value" class="form-control" placeholder="From" required>
+                                <input type="text" name="value2" id="value2" class="form-control" placeholder="To" required>
+                            </div>
                         </center>
                     </div>
                     <div class="col">
                         <center> 
-                        <button type="button" class="btn btn-danger">Remove Node</button>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" value="submit" class="btn btn-danger" onclick="RemoveNode()">Remove Node</button>
+                            </div>
+                            <input type="text" name="value3" id="value3" class="form-control" placeholder="id" required
+                        </div>
+                            
                         </center>
                     </div>
                 </div>

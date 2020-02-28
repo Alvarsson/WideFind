@@ -27,7 +27,7 @@ Test_id = "nod"
 
 
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 def index():
 	data_array = []
 	print("hej")

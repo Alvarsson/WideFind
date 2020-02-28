@@ -115,8 +115,28 @@ function AddEdge() {
     s.refresh();
 }
 function RemoveNode() {
+    var nodeid = document.getElementById('value3').value[0];
+    s.graph.dropNode("n" + nodeid);
+    nodeCount = nodeCount -1;
+    s.refresh();
+}
 
+function Createfile() {
+  var fs = require('fs');
+  fs.appendFile('node_data.json', 'Hello content!', function (err) {
+    if (err) throw err;
+    console.log('Saved!');
+  });
 
+}
+
+function UpdateJson() {
+    var fs = require('fs');
+    var fullGraph = { nodes: s.graph.nodes(), edges: s.graph.edges() };
+    fs.writeFile('node_data.json', fullGraph, function(err){
+      if (err) throw err;
+      console.log('Updated the json file')
+    });
 }
 
 // Initialize the dragNodes plugin:
@@ -136,7 +156,8 @@ console.log(event);
 });
 
 s.bind('clickNode', function(e) {
-  console.log(e.type, e.data.node.label, e.data.node.color);
+  console.log(e.type, e.data.node.id);
+  var nodeid = e.data.node.id;
 });
 s.bind('overEdge outEdge clickEdge doubleClickEdge rightClickEdge', function(e) {
   console.log(e.type, e.data.edge, e.data.captor);
@@ -147,27 +168,6 @@ s.bind('clickStage', function(e) {
 s.bind('doubleClickStage rightClickStage', function(e) {
   console.log(e.type, e.data.captor);
 }); 
- 
-// -------------------TESTING ONLY--------------------------
-/* for (i = 0; i < N; i++)
-  g.nodes.push({
-    id: 'n' + i,
-    label: 'Node ' + i,
-    x: Math.random(),
-    y: Math.random(),
-    size: Math.random(),
-    color: '#666'
-  });
-for (i = 0; i < E; i++)
-  g.edges.push({
-    id: 'e' + i,
-    source: 'n' + (Math.random() * N | 0),
-    target: 'n' + (Math.random() * N | 0),
-    size: Math.random(),
-    color: '#ccc'
-  });
- */
-
 </script>
 
 {% endblock %}
