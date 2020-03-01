@@ -3,7 +3,7 @@ version: '3'
 services:
 
   neo4j:
-    build: ./neo4j
+    build: ./Backend/neo4j
     ports:
       - 7474:7474
       - 7687:7687
@@ -14,7 +14,7 @@ services:
       - NEO4J_dbms_shell_enabled=true
 
   api:
-    build: ./api
+    build: ./Backend/api
     ports:
       - 4000:4000
     links:
@@ -23,7 +23,7 @@ services:
     - neo4j
 
 #  ui:
-#    build: ./ui
+#    build: ./Frontend
 #    ports:
 #      - 3000:3000
 #    links:
