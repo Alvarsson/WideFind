@@ -5,8 +5,8 @@ services:
   neo4j:
     build: ./Backend/neo4j
     ports:
-      - 7474:7474
-      - 7687:7687
+      - 7474:7474 # Browser
+      - 7687:7687 # Bolt
     environment:
       - NEO4J_dbms_security_procedures_unrestricted=apoc.*
       - NEO4J_apoc_import_file_enabled=true
@@ -25,7 +25,8 @@ services:
   ui:
     build: ./Frontend
     ports:
-      - 3000:3000
+      - 5000:5000
+      - 4001:4001
     links:
     - api
     depends_on:

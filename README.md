@@ -26,7 +26,7 @@ Navigera till projektets hemmapp i en terminal. Samma mapp där du finner filen 
 ```
 
 ## Bygg om projektet
-(Måste köras när du ändrat i koden)
+Måste köras när du ändrat i koden. Bygg bara om projektet som du ändrat för att spara tid. Det kan ta en stund.
 ```
-> docker-compose up --build -d
+> docker-compose up --build -d neo4j/api/ui
 ```

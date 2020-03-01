@@ -10,7 +10,8 @@ ADD . /app
 # Install the dependencies
 RUN pip install -r requirements.txt
 
-EXPOSE 3000
+EXPOSE 5000
+EXPOSE 4001
 
 # run the command to start uWSGI
-CMD ["uwsgi", "app.ini"]
+CMD ["flask", "run"]
