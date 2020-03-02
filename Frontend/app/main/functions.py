@@ -5,8 +5,8 @@ import json
 import os
 import pandas as pd
 
-port = 4001
-url = "http://127.0.0.1:" + str(port)
+port = 4000
+url = "http://api:" + str(port)
 
 def load_gateways():
 	query = """ query { Gateway {

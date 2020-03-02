@@ -28,7 +28,6 @@ services:
     build: ./Frontend
     ports:
       - 5000:5000
-      - 4001:4001
     links:
     - api
     depends_on:
