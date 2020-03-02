@@ -13,6 +13,7 @@ TODO: Fixa funktion för att para ihop detekterade gateways med inlagda noder, n
 TODO: Activity feed, vad ska läggas in där?
 TODO: Informationen av noder måste ju få all data korrekt
 TODO: I activity field, lägg till nod, nog har tagits bort etc. alla event ska dit.
+TODO: Skicka data mellan jsfunction med JQuery/ajax 
 """
 
 
@@ -29,6 +30,7 @@ Test_id = "nod"
 
 @bp.route('/', methods=['GET', 'POST'])
 def index():
+
 	data_array = []
 	print("hej")
 	#add_gateway(x,y,z,ip,active)

@@ -9,6 +9,9 @@ port = 4000
 url = "http://127.0.0.1:" + str(port)
 
 # Kolla om ni måste parsa om datan för alla noder samt enskilda till id info
+def exportJson():
+	data = {}
+
 def parseToData():
     array = []
     nodeInfo = load_gateways()

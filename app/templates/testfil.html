@@ -7,21 +7,9 @@
 <script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.plugins.dragNodes.js") }}'></script>
 <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script>
-<!-- <script src='{{ url_for("static", filename="js/renderers/settings.js") }}'></script> -->
 <script src='{{ url_for("static", filename="js/renderers/sigma.canvas.edges.labels.def.js") }}'></script>
-<!-- <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script> -->
-<!-- <div>
-    <button onclick="AddNode()"> Add node</button>
-</div>
-<div>
-    
-    <button onclick="test()"> test</button>
-</div>
-<div> 
-    <input type="text" maxlength="2" name="value" id="value" placeholder="From node" required />
-    <input type="text" maxlength="2" name="value" id="value2" placeholder="To node" required/>
-    <input type="button" value="submit" onclick="AddEdge()" />
-</div> -->
+<script type=text/javascript src="{{ url_for('static', filename='jquery.js') }}"></script>
+
 <style>
     #graph-container {
        width:100vh;
@@ -122,21 +110,12 @@ function RemoveNode() {
 }
 
 function Createfile() {
-  var fs = require('fs');
-  fs.appendFile('node_data.json', 'Hello content!', function (err) {
-    if (err) throw err;
-    console.log('Saved!');
-  });
 
 }
 
 function UpdateJson() {
-    var fs = require('fs');
     var fullGraph = { nodes: s.graph.nodes(), edges: s.graph.edges() };
-    fs.writeFile('node_data.json', fullGraph, function(err){
-      if (err) throw err;
-      console.log('Updated the json file')
-    });
+    console.log(fullGraph)
 }
 
 // Initialize the dragNodes plugin:
