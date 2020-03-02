@@ -37,7 +37,7 @@
 
             <div class="col-md">
                 <script src="testfil.html" type="text/html"></script>
-                <div class="row row-cols-3 p-3 mt-1 ml-0 mr-0">
+                <div class="row row-cols-4 p-3 mt-1 ml-0 mr-0">
                     <div class="col">
                         <center> 
                         <button type="button" class="btn btn-success" onclick="AddNode()">Add Node</button>
@@ -68,15 +68,27 @@
                             
                         </center>
                     </div>
+
+                    <div class="col">
+                        <center> 
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" value="submit" class="btn btn-warning" onclick="RemoveEdge()">Remove Edge</button>
+                            </div>
+                            <input type="text" name="value4" id="value4" class="form-control" placeholder="id" required
+                        </div>
+                            
+                        </center>
+                    </div>
                 </div>
 
-                <div class="row p-3 mt-1  bg-light" id="nodeGraph" style="border-top: solid;border-bottom: solid;border-width: 1px">
+                <div class="row p-0 mt-0  bg-light" id="nodeGraph" style="border-top: solid;border-bottom: solid;border-width: 1px">
                     <main class="w-100">
                             {% block main %}{% endblock %}
                     </main>
                 </div>
 
-                <div class="row mt-1 ml-0 mr-0 bg-secondary text-white" style="height: 151px">
+                <div class="row mt-1 ml-0 mr-0 bg-secondary text-white">
                     <div class="tab-content" id="nav-content">
                         <div class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list">
                             <p>id: {{data_array[0]}}</p>
