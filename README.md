@@ -34,7 +34,7 @@ Måste köras när du ändrat i koden. Bygg bara om projektet som du ändrat fö
 ## Starta utan docker / docker-compose
 För att fungera på localhost måste två filer ändras.
 1. Frontend/app/main/functions.py
-   1. Byt ut url till http://localhost+str(port)
+   1. Byt ut url till \"http://localhost\"+str(port)
 2. Backend/api/.env
    1. Byt ut NEO4J_URI till bolt://localhost:7687
 
