@@ -6,7 +6,7 @@ import os
 import pandas as pd
 
 port = 4000
-url = "http://api:" + str(port)
+url = "http://localhost:" + str(port)
 
 def load_gateways():
 	query = """ query { Gateway {
