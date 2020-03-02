@@ -30,3 +30,12 @@ Måste köras när du ändrat i koden. Bygg bara om projektet som du ändrat fö
 ```
 > docker-compose up --build -d neo4j/api/ui
 ```
+
+## Starta utan docker / docker-compose
+För att fungera på localhost måste två filer ändras.
+1. Frontend/app/main/functions.py
+   1. Byt ut url till http://localhost+str(port)
+2. Backend/api/.env
+   1. Byt ut NEO4J_URI till bolt://localhost:7687
+
+Sedan kan frontenden startas med Flask som vanligt och backenden startas med vanlig neo4j desktop samt att starta API:et med npm start.
