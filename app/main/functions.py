@@ -16,12 +16,9 @@ def parseToData():
 	array = []
 	nodeInfo = load_gateways()
 	json_data = json.loads(nodeInfo)
-	#print(json_data)
 	json_data = json_data.get("data")
 	json_data = json_data.get("Gateway")
-	#print(json_data)
 	json_data = json_data[0]
-	#print(json_data)
 	for item in json_data.values():
 		array.append(item)
 	return array

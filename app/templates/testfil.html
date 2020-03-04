@@ -64,7 +64,7 @@ function test(){
 }
 // ---------Testing function only---------
 function update(){
-    s.graph.nodes().forEach(function(n){
+    s.graph.nodes().forEach(function(n) {
         n.size = 34,
         n.color = '#000'
     });
@@ -129,9 +129,6 @@ function ConfigureGateway() {
 
     var gateway_uuid = document.getElementById('conf_gateway').value
     var marker_id = document.getElementById('conf_marker').value
-
-    console.log(gateway_uuid)
-    console.log(marker_id)
 
     const query1 = {
         query: `mutation {

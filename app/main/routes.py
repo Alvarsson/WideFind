@@ -22,11 +22,7 @@ OPT TODO: fixa så att noders ID alltid är så små de kan vara
 def index():
 	data_array = []
 	data_array = parseToData()
-	print(data_array)
-	print(type(data_array))
 	unconfigured_gateways = get_unconfigured_gateways()
-	print(unconfigured_gateways)
-	print(type(unconfigured_gateways))
 
 	return render_template("testfil.html", data_array=data_array, unconfigured_gateways=unconfigured_gateways)
 
