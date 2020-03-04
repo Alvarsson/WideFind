@@ -25,7 +25,7 @@ def parseToData():
 
 def load_gateways():
 	query = """ query { Gateway {
-			id
+			uuid
 			x
 			y
 			z
@@ -37,8 +37,8 @@ def load_gateways():
 	result = requests.post(url, json=parameters)
 	return result.text
 
-def delete_gateway(id):
-	mutation = """ mutation { DeleteGateway(id: "%s") {
+def delete_gateway(uuid):
+	mutation = """ mutation { DeleteGateway(uuid: "%s") {
 			id
 		}
 	}""" % (id)
@@ -48,7 +48,7 @@ def delete_gateway(id):
 
 def add_gateway( x, y, z, ip, active):
 	mutation = """ mutation { CreateGateway(x: %d, y: %d, z: %d, ip_address: "%s", active: %s) {
-			id
+			uuid
 			x
 			y
 			z
