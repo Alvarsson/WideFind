@@ -20,11 +20,10 @@ OPT TODO: fixa så att noders ID alltid är så små de kan vara
 
 @bp.route('/', methods=['GET', 'POST'])
 def index():
-	data_array = []
-	data_array = parseToData()
+	configured_gateways = get_configured_gateways()
 	unconfigured_gateways = get_unconfigured_gateways()
 
-	return render_template("testfil.html", data_array=data_array, unconfigured_gateways=unconfigured_gateways)
+	return render_template("testfil.html", configured_gateways=configured_gateways, unconfigured_gateways=unconfigured_gateways)
 
 
 @bp.route('/network')

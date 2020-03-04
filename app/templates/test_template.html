@@ -119,14 +119,16 @@
 
                 <div class="row mt-1 ml-0 mr-0 bg-secondary text-white">
                     <div class="tab-content" id="nav-content">
-                        <div class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list">
-                            <p>id: {{data_array[0]}}</p>
-                            <p>x: {{data_array[1]}}</p>
-                            <p>y: {{data_array[2]}}</p>
-                            <p>z: {{data_array[3]}}</p>
-                            <p>ip: {{data_array[4]}}</p>
-                            <p>active: {{data_array[5]}}</p>
-                        </div>
+                        {% for gateway in configured_gateways %}
+                            <div class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list">
+                                <p>uuid: {{ gateway.uuid }}</p>
+                                <p>x: {{ gateway.x }}</p>
+                                <p>y: {{ gateway.y }}</p>
+                                <p>z: {{ gateway.z }}</p>
+                                <p>ip: {{ gateway.ip_address }}</p>
+                                <p>active: {{ gateway.active }}</p>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
 
@@ -138,10 +140,9 @@
                 </div>
                 <div class="col p-3 text-white">
                     <div class="list-group" id="list-tab" role="tablist" >
-                        
-                        <!--HÄR KAN NÅGON FÅ FIXA SÅ ATT ALLA NODERS ID KOMMER IN I LISTAN-->
-                        <a class="list-group-item list-group-item-action" id="list-id-list" data-toggle="list" href="#list-id" role="tab" aria-controls="id">{{data_array[0]}}</a>
-                        
+                        {% for gateway in configured_gateways %}
+                            <a class="list-group-item list-group-item-action" id="list-id-list" data-toggle="list" href="#list-id" role="tab" aria-controls="id"> Gateway uuid: {{ gateway.uuid }} </a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

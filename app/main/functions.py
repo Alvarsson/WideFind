@@ -8,48 +8,43 @@ import pandas as pd
 port = 4000
 url = "http://localhost:" + str(port)
 
-# Kolla om ni måste parsa om datan för alla noder samt enskilda till id info
-def exportJson():
-	data = {}
-
-def parseToData():
-	array = []
-	nodeInfo = load_gateways()
-	json_data = json.loads(nodeInfo)
-	json_data = json_data.get("data")
-	json_data = json_data.get("Gateway")
-	json_data = json_data[0]
-	for item in json_data.values():
-		array.append(item)
-	return array
-
-def load_gateways():
-	query = """ query { 
-		Gateway {
-			uuid
-			x
-			y
-			z
-			ip_address
-			active
+def get_configured_gateways():
+	query = """ { 
+		Connected {
+			gateway {
+				uuid
+				x
+				y
+				z
+				ip_address
+				active
+			}
 		}
 	} """
-	return send_query(query)
+	result = send_query(query)
+	print(result)
+	return parse_data(result, "Connected")
 
 def get_unconfigured_gateways():
-    query = """ query { 
-		UnconnectedGateways {
-			gateway { 
-      			uuid
-      		}
+    query = """ { 
+		Unconnected {
+			gateway {
+				uuid
+				x
+				y
+				z
+				ip_address
+				active
+			}
 		}
 	} """
-    return parse_data(send_query(query))
+    result = send_query(query)
+    return parse_data(result, "Unconnected")
 
-def parse_data(data):
+def parse_data(data, type):
 	gateways_str = data
 	gateways_json = json.loads(gateways_str)
-	return gateways_json["data"]["Unconnected"][0]["gateway"]
+	return gateways_json["data"][type][0]["gateway"]
 
 def send_query(query):
 	parameters = {"query": query}
