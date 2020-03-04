@@ -17,9 +17,14 @@ type Marker{
   comments: [Comment] @relation(name: "COMMENT", direction: "OUT")
 }
 
-type Unconnected{
+type Unconnected {
   id:ID!
   gateway: [Gateway] @cypher(statement: "MATCH (g:Gateway) WHERE NOT (g)-[:CONNECTED_MARKER]-() RETURN g")
+}
+
+type Connected {
+  id: ID!
+  gateway: [Gateway] @cypher(statement: "MATCH (g:Gateway) WHERE (g)-[:CONNECTED_MARKER]-() RETURN g")
 }
 
 type Comment{
