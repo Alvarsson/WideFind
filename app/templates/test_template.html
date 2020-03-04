@@ -33,7 +33,36 @@
                 <div class="col-md-2 p-3 text-white">
                     VÄNSTER UNDER
                 </div>
+
+                
+                <div class="col p-3 text-white" style="border-bottom: solid; border-color:white">
+                    Unconfigured gateways
+                </div>
+                {% set i = 0 %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"> # </th>
+                            <th scope="col"> UUID </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for gateway in unconfigured_gateways %}
+                            <tr>
+                                <th scope="row"> {{ loop.index }} </th>
+                                <td> {{ gateway.uuid }} </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div class="col">
+                    <input type="text" name="conf_gateway" id="conf_gateway" class="form-control" placeholder="Unconfigured gateway UUID" required>
+                    <input type="text" name="conf_marker" id="conf_marker" class="form-control" placeholder="Marker id" required>
+                    <button type="button" class="btn btn-success" onclick="ConfigureGateway()"> Configure Gateway</button>
+                </div>
             </div>
+            
 
             <div class="col-md">
                 <script src="testfil.html" type="text/html"></script>

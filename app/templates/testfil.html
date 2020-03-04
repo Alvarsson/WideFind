@@ -122,6 +122,56 @@ function RemoveEdge() {
 
 }
 
+function ConfigureGateway() {
+    http = new XMLHttpRequest();
+    const port = "4000";
+    const url = "http://localhost:" + port
+
+    var gateway_uuid = document.getElementById('conf_gateway').value
+    var marker_id = document.getElementById('conf_marker').value
+
+    console.log(gateway_uuid)
+    console.log(marker_id)
+
+    const query1 = {
+        query: `mutation {
+            AddMarkerGateway(from: {id: "` + marker_id + `"}, to: {uuid: "` + gateway_uuid + `"}) {
+                    from {
+                        id
+                    }
+                    to { 
+                        uuid
+                    }
+                }  
+            }`
+    }
+
+    http.open("POST", url);
+    http.setRequestHeader("Content-Type", "application/json")
+    http.responseType = 'json';
+    http.send(JSON.stringify(query1));
+    
+
+    const query2 = {
+        query: `mutation {
+            AddGatewayMarker(from: {uuid: "` + gateway_uuid + `"}, to: {id: "` + marker_id + `"}) {
+                    from {
+                        uuid
+                    }
+                    to { 
+                        id
+                    }
+                }  
+            }`
+    }
+
+    http = new XMLHttpRequest();
+    http.open("POST", url);
+    http.setRequestHeader("Content-Type", "application/json")
+    http.responseType = 'json';
+    http.send(JSON.stringify(query2));
+}
+
 function Createfile() {
 
 }

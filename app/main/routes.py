@@ -18,30 +18,17 @@ TODO: Skicka data mellan jsfunction med JQuery/ajax
 OPT TODO: fixa så att noders ID alltid är så små de kan vara
 """
 
-
-id = "hejsan"
-x = 321
-y = 543
-z = 876
-ip = "0.0.0.1338"
-mac = "321.3213.321.321"
-active = "true"
-Test_id = "nod"
-
-
-
 @bp.route('/', methods=['GET', 'POST'])
 def index():
-
 	data_array = []
-	print("hej")
-	#add_gateway(x,y,z,ip,active)
-	#JA HÄR KOMMER DU BEHÖVA ÄNDRA NÅGOT OCKSÅ VA?
 	data_array = parseToData()
 	print(data_array)
-	print("hej")
+	print(type(data_array))
+	unconfigured_gateways = get_unconfigured_gateways()
+	print(unconfigured_gateways)
+	print(type(unconfigured_gateways))
 
-	return render_template("testfil.html", data_array=data_array )
+	return render_template("testfil.html", data_array=data_array, unconfigured_gateways=unconfigured_gateways)
 
 
 @bp.route('/network')
