@@ -1,3 +1,4 @@
+  
 type Gateway {
   uuid: String!
   marker: Marker @relation(name: "CONNECTED_MARKER", direction:"BOTH")
@@ -6,8 +7,7 @@ type Gateway {
   z: Float
   ip_address: String
   mac_address: String
-  active: Int
-  last_seen: String
+  active: Boolean
 }
 
 type Marker{
@@ -15,11 +15,6 @@ type Marker{
   gateway: Gateway @relation(name: "CONNECTED_GATEWAY", direction: "BOTH")
   neighbors: [Marker] @relation(name: "LINKED_TO", direction: "BOTH")
   comments: [Comment] @relation(name: "COMMENT", direction: "OUT")
-}
-
-type Unconnected{
-  id:ID!
-  gateway: [Gateway] @cypher(statement: "MATCH (g:Gateway) WHERE NOT (g)-[:CONNECTED_MARKER]-() RETURN g")
 }
 
 type Comment{
@@ -31,4 +26,9 @@ type Comment{
 
 type Tag {
   active: Boolean
+}
+
+type Query {
+  UnconnectedGateways: [Gateway]! @cypher(statement:"""MATCH (g:Gateway) WHERE NOT (g)-[:CONNECTED_MARKER]->() RETURN g;""")
+  UnconnectedMarkers: [Marker]! @cypher(statement:"""MATCH (m:Marker) WHERE NOT (m)-[:CONNECTED_GATEWAY]->() RETURN m;""")
 }
