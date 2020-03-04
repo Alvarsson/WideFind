@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    <style>
+        p {
+            display: block;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 3px;
+            margin-right: 0;
+            }
+        #nodeGraph {
+            height: 65%;
+        } 
+        #bar {
+            width: 100%;
+            overflow-y: scroll;
+        }
+        #ActivityFeed {
+            width: 100%;
+        }
+        #ActivityFeed div{
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="row" style="height: 100vh">
+
+            <div class="col-md-2 bg-secondary h-100" id="bar">
+                <div class="col p-3 text-white" style="border-bottom: solid; border-color:white" >
+                    Activity Feed
+                </div>
+                <div class="p-3 text-black" id="ActivityFeed">
+                    VÄNSTER UNDER
+                </div>
+            </div>
+
+            <div class="col-md">
+                <script src="testfil.html" type="text/html"></script>
+                <div class="row row-cols-4 p-3 mt-1 ml-0 mr-0">
+                    <div class="col">
+                        <center> 
+                        <button type="button" class="btn btn-success" onclick="NodeOrEdgeEvent(0)">Add Node</button>
+                        <button type="button" class="btn btn-success" onclick="UppdateJson()">Nodes</button>
+                        </center>
+                    </div>
+                        
+                    <div class="col">
+                        <!-- INTE ALLS SNYGGT SAMT SÅ FÖRSTÖR DET FÖR SIDANS LAYOUT, DETTA KAN ELSA FIXA TILL! Det finns något som är inlagt med px som måste bort -->
+                        <center> 
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" value="submit" class="btn btn-primary" onclick="AddEdge()">Add edge</button>
+                                </div>
+                                <input type="text" name="value" id="value" class="form-control" placeholder="From" required>
+                                <input type="text" name="value2" id="value2" class="form-control" placeholder="To" required>
+                            </div>
+                        </center>
+                    </div>
+                    <div class="col">
+                        <center> 
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" value="submit" class="btn btn-danger" onclick="RemoveNode()">Remove Node</button>
+                            </div>
+                            <input type="text" name="value3" id="value3" class="form-control" placeholder="id" required
+                        </div>
+                            
+                        </center>
+                    </div>
+
+                    <div class="col">
+                        <center> 
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" value="submit" class="btn btn-warning" onclick="RemoveEdge()">Remove Edge</button>
+                            </div>
+                            <input type="text" name="value4" id="value4" class="form-control" placeholder="id" required
+                        </div>
+                            
+                        </center>
+                    </div>
+                </div>
+
+                <div class="row p-0 mt-0  bg-light" id="nodeGraph" style="border-top: solid;border-bottom: solid;border-width: 1px">
+                    <main class="w-100">
+                            {% block main %}{% endblock %}
+                    </main>
+                </div>
+
+                <div class="row mt-1 ml-0 mr-0 bg-secondary text-white">
+                    <div class="tab-content" id="nav-content">
+                        <div class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list">
+
+                            id:<input type="text" id="inputId" value="{{data_array[0]}}"><br>
+                            x:<input type="text" id="inputX" value="{{data_array[1]}}"><br>
+                            y:<input type="text" id="inputY" value="{{data_array[2]}}"><br>
+                            z:<input type="text" id="inputZ" value="{{data_array[3]}}"><br>
+                            ip:<input type="text" id="inputIp" value="{{data_array[4]}}"><br>
+                            <p>active:{{data_array[5]}}"</p>
+                            <button type="button" value="submit" class="btn btn-success" onclick="UpdateInfo()">Update</button>
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-2 bg-secondary h-100" id="bar">
+                <div class="col p-3 text-white" style="border-bottom: solid; border-color: white">
+                    Objects
+                </div>
+                <div class="col p-3 text-white">
+                    <div class="list-group" id="list-tab" role="tablist" >
+                        
+                        <!--HÄR KAN NÅGON FÅ FIXA SÅ ATT ALLA NODERS ID KOMMER IN I LISTAN-->
+                        <a class="list-group-item list-group-item-action" id="list-id-list" data-toggle="list" href="#list-id" role="tab" aria-controls="id">{{data_array[0]}}</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+    // Lägger till ett element i activity feed om man lägger till en nod(gateway) i nodkartan eller en edge
+    function NodeOrEdgeEvent(a){
+        var newDiv = document.createElement("a");	
+        var currentDiv = document.getElementById("ActivityFeed");
+        newDiv.className = "list-group-item list-group-item-action";
+        currentDiv.appendChild(newDiv);
+
+        // Aktivitet som säger att en nod eller edge har lagts till
+       if (a == 0){
+        newDiv.appendChild(document.createTextNode("Gateway added"));
+       }   
+       else if (a == 1){
+        newDiv.appendChild(document.createTextNode("Edge added"));
+       } 
+
+       // Aktivitet som säger att en nod eller edge har tagits bort
+       else if (a == 2){
+        newDiv.appendChild(document.createTextNode("Gateway removed"));
+       }
+       else if (a == 3){
+        newDiv.appendChild(document.createTextNode("Edge removed"));
+       }
+
+       // Aktivitet som säger att en gateway har tappat uppkoppling till hemsidan
+       
+       else if (a == 4){
+        newDiv.appendChild(document.createTextNode("Gateway disconnected"));
+       }
+
+       // Om ett error uppstår
+       else {
+        newDiv.appendChild(document.createTextNode("An error has occured"));
+       }
+    }
+
+    function UpdateInfo(){
+        // Hämtar info från det man skriver in i textrutorna, i början läggs det värdet som redan stod in i textrutan
+        var id0 = document.getElementById("inputId").value,
+            id1 = document.getElementById("inputX").value,
+            id2 = document.getElementById("inputY").value,
+            id3 = document.getElementById("inputZ").value,
+            id4 = document.getElementById("inputIp").value;
+        console.log(id0,id1,id2,id3,id4);
+
+    }
+
+    var nodeunit = ["node1","node2","node3"];
+    var nodes = [1,2,3];
+   // console.log(nodes[0]);
+
+    function changeArray(){
+        console.log(nodes);
+    }
+
+
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

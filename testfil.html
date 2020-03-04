@@ -1,0 +1,171 @@
+
+{%extends "test_template.html" %}
+
+
+{%block main %}
+<script src='{{ url_for("static", filename="js/sigma.min.js") }}'></script>
+<script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
+<script src='{{ url_for("static", filename="js/sigma.plugins.dragNodes.js") }}'></script>
+<script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script>
+<script src='{{ url_for("static", filename="js/renderers/sigma.canvas.edges.labels.def.js") }}'></script>
+<script type=text/javascript src="{{ url_for('static', filename='jquery.js') }}"></script>
+
+<style>
+    #graph-container {
+       width:100vh;
+       height: 600px;
+       margin: auto;
+    }
+    #container {
+      width: 100%;
+      height: auto;
+      margin: auto;
+    }
+   </style>
+<div id="container">
+<div id="graph-container"></div>
+</div>
+
+<script>
+var nodeCount = 0,
+    idcount = 0,
+    edgeCount = 0,
+    edgeid = 0,
+    s,
+    maxNodes = 20,
+    maxEdges = 50,
+    g = {
+        nodes: [],
+        edges: []
+    }
+
+s = new sigma({
+    graph: g,
+    container: 'graph-container',
+    renderers:[ {
+        container: document.getElementById('graph-container'),
+        type: 'canvas'
+    }],
+    settings: {
+        doubleClickEnabled: false,
+        minEdgeSize: 0.5,
+        maxEdgeSize: 4,
+        enableEdgeHovering: true,
+        edgeHoverColor: 'edge',
+        defaultEdgeHoverColor: '#000',
+        edgeHoverSizeRatio: 1,
+        edgeHoverExtremities: true,
+    }
+});
+
+// ---------Testing function only---------
+function test(){
+    alert("s"+ s + "g" + g);
+}
+// ---------Testing function only---------
+function update(){
+    s.graph.nodes().forEach(function(n){
+        n.size = 34,
+        n.color = '#000'
+    });
+    s.refresh();
+}
+
+//Function to add node to graph
+function AddNode() {
+    g.nodes.push(s.graph.addNode({
+        id: 'n' + idcount,
+        label: 'Node ' + idcount,
+        x: idcount,
+        y: 5,
+        size: '8',
+        color: '#666',
+
+    }));
+    idcount = idcount + 1;
+    nodeCount = nodeCount + 1;
+    //#######################################Lade till en functioncall till test_template som lägger till en ruta i activity feed#######################################
+    //dessa finns i addnode, addedge, remove node och remove edge! De kanske inte funkar ordentligt, så om addnode() etc inte funkar vet ni varför
+    NodeOrEdgeEvent(0);
+    s.refresh();
+}
+//Function to add edge between nodes on graph. 
+//TODO: 
+// Fix parsing of incoming node-id from html input
+//
+function AddEdge() {
+    var fromNode = document.getElementById('value').value[0];
+    var toNode = document.getElementById('value2').value[0];
+    g.edges.push(s.graph.addEdge({
+        id: 'e' + edgeid,
+        source: 'n' + fromNode,
+        target: 'n' + toNode,
+        size: '8',
+        color: '#ccc',
+        hover_color: '#000'
+    }));
+    edgeid = edgeid + 1;
+    edgeCount = edgeCount + 1;
+    NodeOrEdgeEvent(1);
+    s.refresh();
+    
+}
+
+function RemoveNode() {
+    var nodeid = document.getElementById('value3').value[0];
+    s.graph.dropNode("n" + nodeid);
+    nodeCount = nodeCount -1;
+    NodeOrEdgeEvent(2);
+    s.refresh();
+}
+
+function RemoveEdge() {
+    var edge_id = document.getElementById('value4').value[0];
+    s.graph.dropEdge('e' + edge_id);
+    edgeCount = edgeCount - 1;
+    NodeOrEdgeEvent(3);
+    s.refresh();
+
+}
+
+function Createfile() {
+
+}
+
+function UpdateJson() {
+    var fullGraph = { nodes: s.graph.nodes(), edges: s.graph.edges() };
+    console.log(fullGraph)
+}
+
+// Initialize the dragNodes plugin:
+var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
+
+dragListener.bind('startdrag', function(event) {
+console.log(event);
+});
+dragListener.bind('drag', function(event) {
+console.log(event);
+});
+dragListener.bind('drop', function(event) {
+console.log(event);
+});
+dragListener.bind('dragend', function(event) {
+console.log(event);
+});
+
+s.bind('clickNode', function(e) {
+  console.log(e.type, e.data.node.id);
+  var nodeid = e.data.node.id;
+});
+s.bind('overEdge outEdge clickEdge doubleClickEdge rightClickEdge', function(e) {
+  console.log(e.type, e.data.edge, e.data.captor);
+});
+s.bind('clickStage', function(e) {
+  console.log(e.type, e.data.captor);
+});
+s.bind('doubleClickStage rightClickStage', function(e) {
+  console.log(e.type, e.data.captor);
+}); 
+</script>
+
+{% endblock %}
