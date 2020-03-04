@@ -7,6 +7,7 @@ import pandas as pd
 from app.main.functions import *
 
 """
+TODO: Fixa nodecount!
 TODO: -------Kolla kommentarer i test_template med caps-lock och lös dem.-------
 TODO: fixa removefunktion och koppla knappen
 TODO: Fixa funktion för att para ihop detekterade gateways med inlagda noder, ny view för det?
@@ -31,15 +32,19 @@ Test_id = "nod"
 @bp.route('/', methods=['GET', 'POST'])
 def index():
 
-	data_array = []
+	# data_array = []
 	print("hej")
-	#add_gateway(x,y,z,ip,active)
-	#JA HÄR KOMMER DU BEHÖVA ÄNDRA NÅGOT OCKSÅ VA?
 	data_array = parseToData()
-	print(data_array)
+	node_dict = data_array[0]
+	id_array = data_array[1]
+	print(id_array)
+	print(node_dict)
 	print("hej")
 
-	return render_template("testfil.html", data_array=data_array )
+	# if request.method == 'POST':
+	# 	request_id = request.form['id_request']
+
+	return render_template("testfil.html", data_array=node_dict, id_array=id_array )
 
 
 @bp.route('/network')

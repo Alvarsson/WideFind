@@ -10,18 +10,30 @@ url = "http://127.0.0.1:" + str(port)
 
 # Kolla om ni måste parsa om datan för alla noder samt enskilda till id info
 def exportJson():
-	data = {}
+    data = load_gateways() #Get data as json
+    data = json.loads(data) #parse to string form without newrow slashes
+    with open('json_data.txt', 'w') as node_json:
+        json.dump(data, node_json)
 
 def parseToData():
-    array = []
+    temp_array = []
+    id_array = []
     nodeInfo = load_gateways()
     json_data = json.loads(nodeInfo)
     json_data = json_data.get("data")
     json_data = json_data.get("Gateway")
-    json_data = json_data[0]
-    for item in json_data.values():
-	    array.append(item)
-    return array
+    node_data = []
+    for i in json_data:
+        node_data.append(i) 
+    print(node_data)
+    for nodes in json_data:
+        for item in nodes.values():
+            temp_array.append(item)
+    print("HHHHHHHHHHH")
+    print(temp_array)
+    for id in temp_array[::6]:
+        id_array.append(id) #Get array of id's
+    return node_data, id_array
 
 def load_gateways():
 	query = """ query { Gateway {
