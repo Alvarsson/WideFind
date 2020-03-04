@@ -167,6 +167,8 @@ function ConfigureGateway() {
     http.setRequestHeader("Content-Type", "application/json")
     http.responseType = 'json';
     http.send(JSON.stringify(query2));
+
+    location.reload();
 }
 
 function Createfile() {
