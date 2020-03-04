@@ -26,3 +26,8 @@ type Comment{
 type Tag {
   active: Boolean
 }
+
+type Query {
+  UnconnectedGateways: [Gateway]! @cypher(statement:"""MATCH (g:Gateway) WHERE NOT (g)-[:CONNECTED_MARKER]->() RETURN g;""")
+  UnconnectedMarkers: [Marker]! @cypher(statement:"""MATCH (m:Marker) WHERE NOT (m)-[:CONNECTED_GATEWAY]->() RETURN m;""")
+}
