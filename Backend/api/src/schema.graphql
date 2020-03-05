@@ -8,6 +8,7 @@ type Gateway {
   ip_address: String
   mac_address: String
   active: Boolean
+  last_seen: DateTime
 }
 
 type Marker{
