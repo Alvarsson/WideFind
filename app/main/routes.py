@@ -7,6 +7,7 @@ import pandas as pd
 from app.main.functions import *
 
 """
+TODO: Fixa nodecount!
 TODO: -------Kolla kommentarer i test_template med caps-lock och lös dem.-------
 TODO: fixa removefunktion och koppla knappen
 TODO: Fixa funktion för att para ihop detekterade gateways med inlagda noder, ny view för det?

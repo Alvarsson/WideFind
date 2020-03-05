@@ -4,6 +4,8 @@
 
 {%block main %}
 <script src='{{ url_for("static", filename="js/sigma.min.js") }}'></script>
+<script src='{{ url_for("static", filename="js/settings.js") }}'></script>
+<script src='{{ url_for("static", filename="js/sigma.layout.forceAtlas2.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.plugins.dragNodes.js") }}'></script>
 <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script>
@@ -296,6 +298,9 @@ function RemoveNode() {
     s.refresh();
 }
 
+function sendID() {
+    var docsss = document.getElementById('list-id').innerHTML;
+}
 function RemoveEdge() {
     var edge_id = document.getElementById('value4').value[0];
     s.graph.dropEdge('e' + edge_id);
