@@ -58,17 +58,87 @@ s = new sigma({
     }
 });
 
+CreateGraphFromDatabase();
+
 // ---------Testing function only---------
-function test(){
+function test() {
     alert("s"+ s + "g" + g);
 }
 // ---------Testing function only---------
-function update(){
+function update() {
     s.graph.nodes().forEach(function(n) {
         n.size = 34,
         n.color = '#000'
     });
     s.refresh();
+}
+
+// Fetch markers from database via graphql 
+function QueryMarkers(http) {
+    const port = "4000";
+    const url = "http://localhost:" + port
+
+    const query = {
+        query: `{
+            Marker {
+                id
+                neighbors {
+                    id
+                }
+            }
+        }`
+    }
+
+    http.open("POST", url);
+    http.setRequestHeader("Content-Type", "application/json")
+    http.responseType = 'json';
+    http.send(JSON.stringify(query));
+}
+
+// Create a sigma js graph from existing markers in database
+function CreateGraphFromDatabase() {
+    http = new XMLHttpRequest();
+    QueryMarkers(http)
+
+    http.onload = function() {
+        markers = http.response
+        console.log(markers)
+        console.log(markers["data"])
+
+        for(let i = 0; i < markers["data"]["Marker"].length; i++) {
+            g.nodes.push(s.graph.addNode({
+                id: 'n' + markers["data"]["Marker"][i]["id"],
+                label: 'Node ' + markers["data"]["Marker"][i]["id"],
+                x: idcount,
+                y: 5,
+                size: '8',
+                color: '#666',
+
+            }));
+            idcount = idcount + 1;
+            nodeCount = nodeCount + 1;
+            s.refresh();
+        }
+        
+        for(let i = 0; i < markers["data"]["Marker"].length; i++) {
+            if (markers["data"]["Marker"][i]["neighbors"].length > 0) {
+                for(let j = 0; j < markers["data"]["Marker"][i]["neighbors"].length; j++) {
+                    console.log("source id: " + markers["data"]["Marker"][i]["id"])
+                    console.log("target id: " + markers["data"]["Marker"][i]["neighbors"][j]["id"])
+                    g.edges.push(s.graph.addEdge({
+                        id: 'e' + edgeid,
+                        source: 'n' + markers["data"]["Marker"][i]["id"],
+                        target: 'n' + markers["data"]["Marker"][i]["neighbors"][j]["id"],
+                        size: '8',
+                        color: '#ccc',
+                        hover_color: '#000'
+                    }));
+                    edgeid = edgeid + 1;
+                    edgeCount = edgeCount + 1;
+                }
+            }
+        }
+    }
 }
 
 //Function to add node to graph
@@ -128,7 +198,6 @@ function RemoveEdge() {
     NodeOrEdgeEvent(3);
 
     s.refresh();
-
 }
 
 function ConfigureGateway() {
