@@ -121,12 +121,12 @@
                     <div class="tab-content" id="nav-content">
                         {% for gateway in configured_gateways %}
                             <div class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list">
-                                id:<input type="text" id="inputId" value="{{data_array[0]}}"><br>
-                                x:<input type="text" id="inputX" value="{{data_array[1]}}"><br>
-                                y:<input type="text" id="inputY" value="{{data_array[2]}}"><br>
-                                z:<input type="text" id="inputZ" value="{{data_array[3]}}"><br>
-                                ip:<input type="text" id="inputIp" value="{{data_array[4]}}"><br>
-                                <p>active:{{data_array[5]}}"</p>
+                                id:<input type="text" id="inputId" value="{{ gateway.uuid }}"><br>
+                                x:<input type="text" id="inputX" value="{{ gateway.x }}"><br>
+                                y:<input type="text" id="inputY" value="{{ gateway.y }}"><br>
+                                z:<input type="text" id="inputZ" value="{{ gateway.z }}"><br>
+                                ip:<input type="text" id="inputIp" value="{{ gateway.ip_adress }}"><br>
+                                <p> active:{{ gateway.active }}" </p>
                                 <button type="button" value="submit" class="btn btn-success" onclick="UpdateInfo()">Update</button>
                             </div>
                         {% endfor %}
