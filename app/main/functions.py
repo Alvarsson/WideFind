@@ -106,5 +106,3 @@ def update_gateway(id,x,y,z,ip,comment):
         comment
         }
     } """ % (id,x,y,z,ip,comment)
-
-
