@@ -21,12 +21,14 @@ def get_configured_gateways():
 			}
 		}
 	} """
-	result = send_query(query)
-	print(result)
-	return parse_data(result, "Connected")
+	gateways_str = send_query(query)
+	gateways_json = json.loads(gateways_str)
+	print(gateways_json)
+	return gateways_json["data"]["Connected"][0]["gateway"]
+
 
 def get_unconfigured_gateways():
-    query = """ { 
+	query = """ { 
 		Unconnected {
 			gateway {
 				uuid
@@ -38,13 +40,9 @@ def get_unconfigured_gateways():
 			}
 		}
 	} """
-    result = send_query(query)
-    return parse_data(result, "Unconnected")
-
-def parse_data(data, type):
-	gateways_str = data
+	gateways_str = send_query(query)
 	gateways_json = json.loads(gateways_str)
-	return gateways_json["data"][type][0]["gateway"]
+	return gateways_json["data"]["Unconnected"][0]["gateway"]
 
 def send_query(query):
 	parameters = {"query": query}
