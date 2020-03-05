@@ -84,7 +84,10 @@ function AddNode() {
     }));
     idcount = idcount + 1;
     nodeCount = nodeCount + 1;
-    
+    //#######################################Lade till en functioncall till test_template.html som lägger till en ruta i activity feed#######################################
+    //dessa finns i addnode, addedge, remove node och remove edge! De kanske inte funkar ordentligt, så om addnode() etc inte funkar vet ni varför
+    NodeOrEdgeEvent(0);
+
     s.refresh();
 }
 //Function to add edge between nodes on graph. 
@@ -104,6 +107,8 @@ function AddEdge() {
     }));
     edgeid = edgeid + 1;
     edgeCount = edgeCount + 1;
+    NodeOrEdgeEvent(1);
+
     s.refresh();
 }
 
@@ -111,6 +116,8 @@ function RemoveNode() {
     var nodeid = document.getElementById('value3').value[0];
     s.graph.dropNode("n" + nodeid);
     nodeCount = nodeCount -1;
+    NodeOrEdgeEvent(2);
+
     s.refresh();
 }
 
@@ -118,6 +125,8 @@ function RemoveEdge() {
     var edge_id = document.getElementById('value4').value[0];
     s.graph.dropEdge('e' + edge_id);
     edgeCount = edgeCount - 1;
+    NodeOrEdgeEvent(3);
+
     s.refresh();
 
 }

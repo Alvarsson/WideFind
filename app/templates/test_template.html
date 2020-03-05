@@ -30,7 +30,7 @@
                 <div class="col p-3 text-white" style="border-bottom: solid; border-color:white">
                     Activity Feed
                 </div>
-                <div class="col-md-2 p-3 text-white">
+                <div class="p-3 text-black" id="ActivityFeed">
                     VÄNSTER UNDER
                 </div>
 
@@ -121,12 +121,13 @@
                     <div class="tab-content" id="nav-content">
                         {% for gateway in configured_gateways %}
                             <div class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list">
-                                <p>uuid: {{ gateway.uuid }}</p>
-                                <p>x: {{ gateway.x }}</p>
-                                <p>y: {{ gateway.y }}</p>
-                                <p>z: {{ gateway.z }}</p>
-                                <p>ip: {{ gateway.ip_address }}</p>
-                                <p>active: {{ gateway.active }}</p>
+                                id:<input type="text" id="inputId" value="{{data_array[0]}}"><br>
+                                x:<input type="text" id="inputX" value="{{data_array[1]}}"><br>
+                                y:<input type="text" id="inputY" value="{{data_array[2]}}"><br>
+                                z:<input type="text" id="inputZ" value="{{data_array[3]}}"><br>
+                                ip:<input type="text" id="inputIp" value="{{data_array[4]}}"><br>
+                                <p>active:{{data_array[5]}}"</p>
+                                <button type="button" value="submit" class="btn btn-success" onclick="UpdateInfo()">Update</button>
                             </div>
                         {% endfor %}
                     </div>
@@ -148,6 +149,87 @@
             </div>
         </div>
     </div>
+
+    <script>
+
+        //Array som listar nod id på hemsidan, används för att lista dem i objects listan och för att sortera dem.
+        var nodes = ["node1","node2","node3"];
+    
+        function changeArray(a){
+    
+            if (a==0){
+                nodes.push("node" + (nodes.length+1));
+                console.log(nodes);
+            }
+            else if(a==1){
+                //tar bort sista index i arrayen.
+                nodes.splice(-1,1);
+                console.log(nodes);
+            }
+            else{
+                console.log("An error has occured (nodeArray)");
+            }
+        }
+    
+    
+    
+        // Lägger till ett element i activity feed om man lägger till en nod(gateway) i nodkartan eller en edge.
+        function NodeOrEdgeEvent(a){
+            var newDiv = document.createElement("a");	
+            var currentDiv = document.getElementById("ActivityFeed");
+            newDiv.className = "list-group-item list-group-item-action";
+            currentDiv.appendChild(newDiv);
+    
+            // Aktivitet som säger att en nod eller edge har lagts till.
+           if (a == 0){
+            newDiv.appendChild(document.createTextNode("Gateway added"));
+           }   
+           else if (a == 1){
+            newDiv.appendChild(document.createTextNode("Edge added"));
+           } 
+    
+           // Aktivitet som säger att en nod eller edge har tagits bort.
+           else if (a == 2){
+            newDiv.appendChild(document.createTextNode("Gateway removed"));
+           }
+           else if (a == 3){
+            newDiv.appendChild(document.createTextNode("Edge removed"));
+           }
+    
+           // Aktivitet som säger att en gateway har tappat uppkoppling till hemsidan.
+           
+           else if (a == 4){
+            newDiv.appendChild(document.createTextNode("Gateway disconnected"));
+           }
+    
+           // Om ett error uppstår
+           else {
+            newDiv.appendChild(document.createTextNode("An error has occured"));
+           }
+        }
+    
+    
+    
+        function UpdateInfo(){
+            // Hämtar info från det man skriver in i textrutorna, i början läggs det värdet som redan stod in i textrutan.
+            var id = document.getElementById("inputId").value,
+                x = document.getElementById("inputX").value,
+                y = document.getElementById("inputY").value,
+                z = document.getElementById("inputZ").value,
+                ip = document.getElementById("inputIp").value,
+                comment = "abcd";
+            console.log(id,x,y,z,ip);
+    
+            $.ajax({
+                type: "POST",
+                url: "~/app/main/functions.py",
+                data: { param: text}
+            }).done(function( o ) {
+                update_gateway(id,x,y,z,ip,comment);
+                console.log("Shouldve called update_gateway() in function.py with updated info now")
+            });
+        }
+    </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
