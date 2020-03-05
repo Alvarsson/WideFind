@@ -1,7 +1,7 @@
   
 type Gateway {
   uuid: String!
-  marker: Marker @relation(name: "CONNECTED_MARKER", direction:"BOTH")
+  marker: Marker @relation(name: "CONNECTED_MARKER", direction:"OUT")
   x: Float
   y: Float
   z: Float
@@ -11,8 +11,17 @@ type Gateway {
   last_seen: DateTime
 }
 
+type Static {
+  id: ID!
+  marker_counter: Int! 
+  relation_counter: Int! 
+}
+
 type Marker{
   id:ID!
+  x: Float
+  y: Float
+
   gateway: Gateway @relation(name: "CONNECTED_GATEWAY", direction: "BOTH")
   neighbors: [Marker] @relation(name: "LINKED_TO", direction: "BOTH")
   comments: [Comment] @relation(name: "COMMENT", direction: "OUT")

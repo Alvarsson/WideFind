@@ -73,21 +73,30 @@ function update() {
     s.refresh();
 }
 
+// Save the graph positions of each marker in the database
+function SaveGraph() {
+    node_arr = s.graph.nodes()
+
+    for(let i = 0; i < s.graph.nodes().length; i++) {
+        http = new XMLHttpRequest();
+        const query = {
+            query: `mutation { 
+	            UpdateMarker(id: "` + node_arr[i]["id"] + `", x: ` + node_arr[i]["x"] + `, y: ` + node_arr[i]["y"] + `) { 
+                    id
+                    x
+                    y
+                }
+            }`
+        }
+        SendQuery(http, query);
+    }
+}
+
+
 // Fetch markers from database via graphql 
-function QueryMarkers(http) {
+function SendQuery(http, query) {
     const port = "4000";
     const url = "http://localhost:" + port
-
-    const query = {
-        query: `{
-            Marker {
-                id
-                neighbors {
-                    id
-                }
-            }
-        }`
-    }
 
     http.open("POST", url);
     http.setRequestHeader("Content-Type", "application/json")
@@ -98,37 +107,44 @@ function QueryMarkers(http) {
 // Create a sigma js graph from existing markers in database
 function CreateGraphFromDatabase() {
     http = new XMLHttpRequest();
-    QueryMarkers(http)
+    const query = {
+        query: `{
+            Marker {
+                id
+                x
+                y
+                neighbors {
+                    id
+                }
+            }
+        }`
+    }
+    SendQuery(http, query)
 
     http.onload = function() {
         markers = http.response
-        console.log(markers)
-        console.log(markers["data"])
 
         for(let i = 0; i < markers["data"]["Marker"].length; i++) {
             g.nodes.push(s.graph.addNode({
-                id: 'n' + markers["data"]["Marker"][i]["id"],
+                id: "" + markers["data"]["Marker"][i]["id"],
                 label: 'Node ' + markers["data"]["Marker"][i]["id"],
-                x: idcount,
-                y: 5,
+                x: markers["data"]["Marker"][i]["x"],
+                y: markers["data"]["Marker"][i]["y"],
                 size: '8',
                 color: '#666',
 
             }));
             idcount = idcount + 1;
             nodeCount = nodeCount + 1;
-            s.refresh();
         }
         
         for(let i = 0; i < markers["data"]["Marker"].length; i++) {
             if (markers["data"]["Marker"][i]["neighbors"].length > 0) {
                 for(let j = 0; j < markers["data"]["Marker"][i]["neighbors"].length; j++) {
-                    console.log("source id: " + markers["data"]["Marker"][i]["id"])
-                    console.log("target id: " + markers["data"]["Marker"][i]["neighbors"][j]["id"])
                     g.edges.push(s.graph.addEdge({
-                        id: 'e' + edgeid,
-                        source: 'n' + markers["data"]["Marker"][i]["id"],
-                        target: 'n' + markers["data"]["Marker"][i]["neighbors"][j]["id"],
+                        id: "" + edgeid,
+                        source: "" + markers["data"]["Marker"][i]["id"],
+                        target: "" + markers["data"]["Marker"][i]["neighbors"][j]["id"],
                         size: '8',
                         color: '#ccc',
                         hover_color: '#000'
@@ -138,54 +154,143 @@ function CreateGraphFromDatabase() {
                 }
             }
         }
+
+        console.log(s.graph.edges());
+        console.log(s.graph.nodes());
+
+        s.refresh();
     }
 }
 
 //Function to add node to graph
 function AddNode() {
-    g.nodes.push(s.graph.addNode({
-        id: 'n' + idcount,
-        label: 'Node ' + idcount,
-        x: idcount,
-        y: 5,
-        size: '8',
-        color: '#666',
+    // Fetch the static counter from the database
+    http = new XMLHttpRequest();
+    const query = {
+        query: `{ 
+            Static { 
+                marker_counter
+            }
+        }`
+    }
+    SendQuery(http, query);
 
-    }));
-    idcount = idcount + 1;
-    nodeCount = nodeCount + 1;
-    //#######################################Lade till en functioncall till test_template.html som lägger till en ruta i activity feed#######################################
-    //dessa finns i addnode, addedge, remove node och remove edge! De kanske inte funkar ordentligt, så om addnode() etc inte funkar vet ni varför
-    NodeOrEdgeEvent(0);
+    http.onload = function() {
+        marker_counter = http.response["data"]["Static"][0]["marker_counter"];
 
-    s.refresh();
+        g.nodes.push(s.graph.addNode({
+            id: "" + (marker_counter + 1),
+            label: 'Node ' + (marker_counter + 1),
+            x: 2.0,
+            y: 2.0,
+            size: '8',
+            color: '#666',
+
+        }));
+        idcount = idcount + 1;
+        nodeCount = nodeCount + 1;
+        
+        // Adding a marker to the database
+        http = new XMLHttpRequest();
+        const query2 = {
+            query: `mutation { 
+                CreateMarker(id: ` + (marker_counter + 1) + `, x: 2.0, y: 5.0) { 
+                    id
+                }
+            }`
+        }
+        SendQuery(http, query2)
+
+        // Increment "marker_counter" attribute of "Static" node in neo4j
+        http = new XMLHttpRequest();
+        const query3 = {
+            query: `mutation { 
+                UpdateStatic(id: 0, marker_counter: ` + (marker_counter + 1) + `) { 
+                    id
+                }
+            }`
+        }
+        SendQuery(http, query3)
+
+        NodeOrEdgeEvent(0);
+
+        console.log(s.graph.edges())
+        s.refresh();
+    }
 }
-//Function to add edge between nodes on graph. 
-//TODO: 
-// Fix parsing of incoming node-id from html input
-//
-function AddEdge() {
-    var fromNode = document.getElementById('value').value[0];
-    var toNode = document.getElementById('value2').value[0];
-    g.edges.push(s.graph.addEdge({
-        id: 'e' + edgeid,
-        source: 'n' + fromNode,
-        target: 'n' + toNode,
-        size: '8',
-        color: '#ccc',
-        hover_color: '#000'
-    }));
-    edgeid = edgeid + 1;
-    edgeCount = edgeCount + 1;
-    NodeOrEdgeEvent(1);
 
-    s.refresh();
+// Add edge between nodes on graph. 
+function AddEdge() {
+    // Fetch the static counter from the database
+    http = new XMLHttpRequest();
+    const query = {
+        query: `{ 
+            Static { 
+                relation_counter
+            }
+        }`
+    }
+    SendQuery(http, query);
+
+    http.onload = function() {
+        relation_counter = http.response["data"]["Static"][0]["relation_counter"];
+
+        var fromNode = document.getElementById('value').value[0];
+        var toNode = document.getElementById('value2').value[0];
+        g.edges.push(s.graph.addEdge({
+            id: "" + (relation_counter + 1),
+            source: fromNode,
+            target: toNode,
+            size: '8',
+            color: '#ccc',
+            hover_color: '#000'
+        }));
+        edgeid = edgeid + 1;
+        edgeCount = edgeCount + 1; 
+
+        http = new XMLHttpRequest();
+        const query2 = {
+            query: `mutation { 
+                AddMarkerNeighbors(from:{id: ` + fromNode + `}, to:{id: ` + toNode + `}) {
+                    from{id}
+                    to{id}
+                }
+            }`
+        }
+        SendQuery(http, query2);
+
+        // Increment "relation_counter" attribute of "Static" node in neo4j
+        http = new XMLHttpRequest();
+        const query3 = {
+            query: `mutation { 
+                UpdateStatic(id: 0, relation_counter: ` + (relation_counter + 1) + `) { 
+                    id
+                }
+            }`
+        }
+        SendQuery(http, query3)
+
+        NodeOrEdgeEvent(1);
+
+        s.refresh();
+    }
 }
 
 function RemoveNode() {
     var nodeid = document.getElementById('value3').value[0];
-    s.graph.dropNode("n" + nodeid);
+    s.graph.dropNode(nodeid);
     nodeCount = nodeCount -1;
+
+    http = new XMLHttpRequest();
+    const query = {
+        query: `mutation { 
+            DeleteMarker(id: ` + (nodeid) + `) { 
+                id
+            }
+        }`
+    }
+    SendQuery(http, query)
+
     NodeOrEdgeEvent(2);
 
     s.refresh();
@@ -246,16 +351,9 @@ function ConfigureGateway() {
     http.responseType = 'json';
     http.send(JSON.stringify(query2));
 
+    SaveGraph();
+
     location.reload();
-}
-
-function Createfile() {
-
-}
-
-function UpdateJson() {
-    var fullGraph = { nodes: s.graph.nodes(), edges: s.graph.edges() };
-    console.log(fullGraph)
 }
 
 // Initialize the dragNodes plugin:
