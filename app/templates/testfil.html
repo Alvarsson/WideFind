@@ -4,6 +4,8 @@
 
 {%block main %}
 <script src='{{ url_for("static", filename="js/sigma.min.js") }}'></script>
+<script src='{{ url_for("static", filename="js/settings.js") }}'></script>
+<script src='{{ url_for("static", filename="js/sigma.layout.forceAtlas2.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.plugins.dragNodes.js") }}'></script>
 <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script>
@@ -28,7 +30,9 @@
 
 <script>
 var nodeCount = 0,
+    idcount = 0,
     edgeCount = 0,
+    edgeid = 0,
     s,
     maxNodes = 20,
     maxEdges = 50,
@@ -72,14 +76,15 @@ function update(){
 //Function to add node to graph
 function AddNode() {
     g.nodes.push(s.graph.addNode({
-        id: 'n' + nodeCount,
-        label: 'Node ' + nodeCount,
-        x: nodeCount,
+        id: 'n' + idcount,
+        label: 'Node ' + idcount,
+        x: idcount,
         y: 5,
         size: '8',
         color: '#666',
 
     }));
+    idcount = idcount + 1;
     nodeCount = nodeCount + 1;
     
     s.refresh();
@@ -92,16 +97,19 @@ function AddEdge() {
     var fromNode = document.getElementById('value').value[0];
     var toNode = document.getElementById('value2').value[0];
     g.edges.push(s.graph.addEdge({
-        id: 'e' + edgeCount,
+        id: 'e' + edgeid,
+        label: 'e' + edgeid,
         source: 'n' + fromNode,
         target: 'n' + toNode,
         size: '8',
         color: '#ccc',
         hover_color: '#000'
     }));
+    edgeid = edgeid + 1;
     edgeCount = edgeCount + 1;
     s.refresh();
 }
+
 function RemoveNode() {
     var nodeid = document.getElementById('value3').value[0];
     s.graph.dropNode("n" + nodeid);
@@ -110,7 +118,17 @@ function RemoveNode() {
 }
 
 function sendID() {
-    document.getElementById('list-id').innerHTML = 
+    var docsss = document.getElementById('list-id').innerHTML;
+}
+function RemoveEdge() {
+    var edge_id = document.getElementById('value4').value[0];
+    s.graph.dropEdge('e' + edge_id);
+    edgeCount = edgeCount - 1;
+    s.refresh();
+
+}
+
+function Createfile() {
 
 }
 
