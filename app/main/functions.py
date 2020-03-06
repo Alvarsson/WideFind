@@ -24,7 +24,10 @@ def get_configured_gateways():
 	gateways_str = send_query(query)
 	gateways_json = json.loads(gateways_str)
 	print(gateways_json)
-	return gateways_json["data"]["Connected"][0]["gateway"]
+	if (gateways_json["data"]["Connected"]):
+		return gateways_json["data"]["Connected"][0]["gateway"]
+	else:
+		return []
 
 
 def get_unconfigured_gateways():
