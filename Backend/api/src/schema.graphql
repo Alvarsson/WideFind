@@ -35,6 +35,11 @@ type Comment{
   content: String
 }
 
+type Event {
+  id: ID!
+  content: String
+}
+
 type Tag {
   active: Boolean
 }
