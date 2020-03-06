@@ -4,7 +4,7 @@ export const resolvers = {
     Event: {
         content(object, params, context, resolveInfo) {
             const url = `${process.env.OBSERVER_IP}/`;
-            axios.post(url, {
+            axios.get(url, {
                 event: object.content
               })
               .then(response => {
