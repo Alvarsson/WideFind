@@ -4,8 +4,6 @@
 
 {%block main %}
 <script src='{{ url_for("static", filename="js/sigma.min.js") }}'></script>
-<script src='{{ url_for("static", filename="js/settings.js") }}'></script>
-<script src='{{ url_for("static", filename="js/sigma.layout.forceAtlas2.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.parsers.json.min.js") }}'></script>
 <script src='{{ url_for("static", filename="js/sigma.plugins.dragNodes.js") }}'></script>
 <script src='{{ url_for("static", filename="js/renderers/sigma.renderers.svg.js") }}'></script>
@@ -157,9 +155,6 @@ function CreateGraphFromDatabase() {
             }
         }
 
-        console.log(s.graph.edges());
-        console.log(s.graph.nodes());
-
         s.refresh();
     }
 }
@@ -302,11 +297,30 @@ function sendID() {
     var docsss = document.getElementById('list-id').innerHTML;
 }
 function RemoveEdge() {
-    var edge_id = document.getElementById('value4').value[0];
-    s.graph.dropEdge('e' + edge_id);
-    edgeCount = edgeCount - 1;
+    var fromNode = document.getElementById('value4').value[0];
+    var toNode = document.getElementById('value5').value[0];
+    var edges = s.graph.edges();
+    var target_edge;
+    
+    for(let j=0;j<edges.length;j++){
+        if(edges[j]["source"]==fromNode && edges[j]["target"]==toNode || edges[j]["target"]==fromNode && edges[j]["source"]==toNode){
+            target_edge = edges[j]["id"];
+            s.graph.dropEdge("" + target_edge);
+            edgeCount = edgeCount - 1;
+        }
+     }
     NodeOrEdgeEvent(3);
 
+    http = new XMLHttpRequest();
+    const query = {
+        query: `mutation{
+            RemoveMarkerNeighbors(from:{id:"`+fromNode+`"}, to:{id:"`+toNode+`"}){
+                from{id}
+                to{id}
+            }
+        }`
+    }
+    SendQuery(http, query)
     s.refresh();
 }
 
