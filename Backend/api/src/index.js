@@ -4,7 +4,6 @@ import { ApolloServer } from "apollo-server";
 import { v1 as neo4j } from "neo4j-driver";
 import { makeAugmentedSchema } from "neo4j-graphql-js";
 import dotenv from "dotenv";
-//import axios from "axios";
 
 // set environment variables from ../.env
 dotenv.config();
