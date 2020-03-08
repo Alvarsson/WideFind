@@ -8,26 +8,52 @@ import pandas as pd
 port = 4000
 url = "http://localhost:" + str(port)
 
-def load_gateways():
-	query = """ query { Gateway {
-			id
-			x
-			y
-			z
-			ip_address
-			active
-			neighbors {
-				_id
+def get_configured_gateways():
+	query = """ {
+		Connected {
+			gateway {
+				uuid
+				x
+				y
+				z
+				ip_address
+				active
 			}
 		}
 	} """
+	gateways_str = send_query(query)
+	gateways_json = json.loads(gateways_str)
+	print(gateways_json)
+	if (gateways_json["data"]["Connected"]):
+		return gateways_json["data"]["Connected"][0]["gateway"]
+	else:
+		return []
+
+
+def get_unconfigured_gateways():
+	query = """ { 
+		Unconnected {
+			gateway {
+				uuid
+				x
+				y
+				z
+				ip_address
+				active
+			}
+		}
+	} """
+	gateways_str = send_query(query)
+	gateways_json = json.loads(gateways_str)
+	return gateways_json["data"]["Unconnected"][0]["gateway"]
+
+def send_query(query):
 	parameters = {"query": query}
-	print(parameters)
 	result = requests.post(url, json=parameters)
 	return result.text
 
-def delete_gateway(id):
-	mutation = """ mutation { DeleteGateway(id: "%s") {
+def delete_gateway(uuid):
+	mutation = """ mutation { DeleteGateway(uuid: "%s") {
 			id
 		}
 	}""" % (id)
@@ -35,9 +61,9 @@ def delete_gateway(id):
 	result = requests.post(url, json=parameters)
 	return result.text
 
-def add_gateway( x, y, z, active, ip):
+def add_gateway(x, y, z, ip, active):
 	mutation = """ mutation { CreateGateway(x: %d, y: %d, z: %d, ip_address: "%s", active: %s) {
-			id
+			uuid
 			x
 			y
 			z
@@ -72,16 +98,14 @@ def delete_connection(fromID, toID):
 	result = requests.post(url, json=parameters)
 	return result.text
 	
-def update_gateway(id,x,y,z,ip,comment):
-    mutation = """ mutation { UpdateGateway(id: %s, x: %d, y: %d, z: %d, ip_address "%s", comment: "%s") {
-        id
-        x
-        y
-        z
-        ip_address
-        active
-        comment
-        }
-    } """ % (id,x,y,z,ip,comment)
-
-
+def update_gateway(id,x,y,z,ip):
+	print("hej")
+	mutation = """ mutation { UpdateGateway(uuid: %s, x: %d, y: %d, z: %d, ip_address "%s") {
+		id
+		x
+		y
+		z
+		ip_address
+		active
+		}
+	} """ % (id,x,y,z,ip)

@@ -1,4 +1,5 @@
 import { typeDefs } from "./graphql-schema";
+import { resolvers } from "./resolvers.js";
 import { ApolloServer } from "apollo-server";
 import { v1 as neo4j } from "neo4j-driver";
 import { makeAugmentedSchema } from "neo4j-graphql-js";
@@ -16,7 +17,8 @@ dotenv.config();
  */
 
 const schema = makeAugmentedSchema({
-  typeDefs
+  typeDefs,
+  resolvers
 });
 
 /*

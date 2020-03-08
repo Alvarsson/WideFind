@@ -11,67 +11,235 @@
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
+    <style>
+        p {
+            display: block;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 3px;
+            margin-right: 0;
+            }
+        #nodeGraph {
+            height: 60%;
+        } 
+        #whatever {
+            overflow-y: scroll;
+        }
+
+    </style>
     <div class="container-fluid">
         <div class="row" style="height: 100vh">
 
-            <div class="col-md-2 bg-secondary h-100">
+            <div class="col-md-2 bg-secondary h-100" id="whatever">
                 <div class="col p-3 text-white" style="border-bottom: solid; border-color:white">
                     Activity Feed
                 </div>
-                <div class="col-md-2 p-3 text-white">
-                    VÄNSTER UNDER
+                <div class="p-3 text-black" id="ActivityFeed">
+                    
+                </div>
+
+                
+                <div class="col p-3 text-white" style="border-bottom: solid; border-color:white">
+                    Unconfigured gateways
+                </div>
+                {% set i = 0 %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"> # </th>
+                            <th scope="col"> UUID </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for gateway in unconfigured_gateways %}
+                            <tr>
+                                <th scope="row"> {{ loop.index }} </th>
+                                <td> {{ gateway.uuid }} </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div class="col">
+                    <input type="text" name="conf_gateway" id="conf_gateway" class="form-control" placeholder="Unconfigured gateway UUID" required>
+                    <input type="text" name="conf_marker" id="conf_marker" class="form-control" placeholder="Marker id" required>
+                    <button type="button" class="btn btn-success" onclick="ConfigureGateway()"> Configure Gateway</button>
                 </div>
             </div>
+            
 
             <div class="col-md">
                 <script src="testfil.html" type="text/html"></script>
-                <div class="row row-cols-3 p-3 mt-1 ml-0 mr-0">
+                <div class="row row-cols-4 p-3 mt-1 ml-0 mr-0">
                     <div class="col">
                         <center> 
                         <button type="button" class="btn btn-success" onclick="AddNode()">Add Node</button>
+                        <button type="button" class="btn btn-success" onclick="SaveGraph()">Save Graph</button>
                         </center>
                     </div>
                         
                     <div class="col">
+                        <!-- INTE ALLS SNYGGT SAMT SÅ FÖRSTÖR DET FÖR SIDANS LAYOUT, DETTA KAN ELSA FIXA TILL! Det finns något som är inlagt med px som måste bort -->
                         <center> 
-                            <input type="text" maxlength="2" name="value" id="value" placeholder="From node" required />
-                            <input type="text" maxlength="2" name="value" id="value2" placeholder="To node" required/>
-                            <button type="button" value="submit" class="btn btn-primary" onclick="AddEdge()">Add edge</button>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" value="submit" class="btn btn-primary" onclick="AddEdge()">Add edge</button>
+                                </div>
+                                <input type="text" name="value" id="value" class="form-control" placeholder="From" required>
+                                <input type="text" name="value2" id="value2" class="form-control" placeholder="To" required>
+                            </div>
                         </center>
                     </div>
                     <div class="col">
                         <center> 
-                        <button type="button" class="btn btn-danger">Remove Node</button>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" value="submit" class="btn btn-danger" onclick="RemoveNode()">Remove Node</button>
+                            </div>
+                            <input type="text" name="value3" id="value3" class="form-control" placeholder="id" required
+                        </div>
+                            
+                        </center>
+                    </div>
+
+                    <div class="col">
+                        <center> 
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" value="submit" class="btn btn-warning" onclick="RemoveEdge()">Remove Edge</button>
+                            </div>
+                            <input type="text" name="value4" id="value4" class="form-control" placeholder="From Node" required>
+                            <input type="text" name="value5" id="value5" class="form-control" placeholder="To Node" required>
+                        </div>
+                            
                         </center>
                     </div>
                 </div>
 
-                <div class="row p-3 h-75 mt-1  bg-light" style="border-top: solid;border-bottom: solid;border-width: 1px">
+                <div class="row p-0 mt-0 bg-light" id="nodeGraph" style="border-top: solid;border-bottom: solid;border-width: 1px">
                     <main class="w-100">
                             {% block main %}{% endblock %}
                     </main>
                 </div>
 
-                <div class="row p-3 mt-1 ml-0 mr-0 bg-secondary text-white" style="height: 120px">
-                    UNDERDEL
+                <div class="row mt-1 ml-0 mr-0 bg-secondary text-white">
+                    <div class="tab-content" id="nav-content">
+                        {% for gateway in configured_gateways %}
+                            <div class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list">
+                                uuid:<a id="inputId">{{ gateway.uuid }}</a><br>
+                                x:<input type="text" id="inputX" value="{{ gateway.x }}"><br>
+                                y:<input type="text" id="inputY" value="{{ gateway.y }}"><br>
+                                z:<input type="text" id="inputZ" value="{{ gateway.z }}"><br>
+                                ip:<input type="text" id="inputIp" value="{{ gateway.ip_address }}"><br>
+                                <p> active:{{ gateway.active }} </p>
+                                <button type="button" value="submit" class="btn btn-success" onclick="UpdateInfo()">Update</button>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
             </div>
 
-            <div class="col-md-2 bg-secondary h-100">
+            <div class="col-md-2 bg-secondary h-100" id="whatever">
                 <div class="col p-3 text-white" style="border-bottom: solid; border-color: white">
                     Objects
                 </div>
-                <div class="col-md-2 p-3 text-white">
-                    <ul class="">
-
-                    </ul>
+                <div class="col p-3 text-white">
+                    <div class="list-group" id="list-tab" role="tablist" >
+                        {% for gateway in configured_gateways %}
+                            <a class="list-group-item list-group-item-action" id="list-id-list" data-toggle="list" href="#list-id" role="tab" aria-controls="id"> Gateway uuid: {{ gateway.uuid }} </a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-            
-
         </div>
     </div>
+
+    <script>
+
+        //Array som listar nod id på hemsidan, används för att lista dem i objects listan och för att sortera dem.
+        var nodes = ["node1","node2","node3"];
+    
+        function changeArray(a){
+    
+            if (a==0){
+                nodes.push("node" + (nodes.length+1));
+                console.log(nodes);
+            }
+            else if(a==1){
+                //tar bort sista index i arrayen.
+                nodes.splice(-1,1);
+                console.log(nodes);
+            }
+            else{
+                console.log("An error has occured (nodeArray)");
+            }
+        }
+    
+    
+    
+        // Lägger till ett element i activity feed om man lägger till en nod(gateway) i nodkartan eller en edge.
+        function NodeOrEdgeEvent(a){
+            var newDiv = document.createElement("a");	
+            var currentDiv = document.getElementById("ActivityFeed");
+            newDiv.className = "list-group-item list-group-item-action";
+            currentDiv.appendChild(newDiv);
+    
+            // Aktivitet som säger att en nod eller edge har lagts till.
+           if (a == 0){
+            newDiv.appendChild(document.createTextNode("Gateway added"));
+           }   
+           else if (a == 1){
+            newDiv.appendChild(document.createTextNode("Edge added"));
+           } 
+    
+           // Aktivitet som säger att en nod eller edge har tagits bort.
+           else if (a == 2){
+            newDiv.appendChild(document.createTextNode("Gateway removed"));
+           }
+           else if (a == 3){
+            newDiv.appendChild(document.createTextNode("Edge removed"));
+           }
+    
+           // Aktivitet som säger att en gateway har tappat uppkoppling till hemsidan.
+           
+           else if (a == 4){
+            newDiv.appendChild(document.createTextNode("Gateway disconnected"));
+           }
+    
+           // Om ett error uppstår
+           else {
+            newDiv.appendChild(document.createTextNode("An error has occured"));
+           }
+        }
+    
+    
+    
+        function UpdateInfo(){
+            // Hämtar info från det man skriver in i textrutorna, i början läggs det värdet som redan stod in i textrutan.
+            var id = document.getElementById("inputId").innerHTML,
+                x = document.getElementById("inputX").value,
+                y = document.getElementById("inputY").value,
+                z = document.getElementById("inputZ").value,
+                ip = document.getElementById("inputIp").value;
+            console.log(id,x,y,z,ip);
+    
+            http = new XMLHttpRequest();
+            const query = {
+                query: `mutation{
+                UpdateGateway(uuid: "`+ id +`", x: `+ x +`, y: `+ y +`, z: `+ z +`, ip_address: "`+ ip +`"){
+                        uuid
+                    }
+                }`
+            }
+            SendQuery(http, query)
+
+            http.onload = function() {
+                console.log(http.response)
+            }
+            //location.reload();
+        }
+    </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
