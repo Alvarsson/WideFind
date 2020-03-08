@@ -20,18 +20,22 @@
             margin-right: 0;
             }
         #nodeGraph {
-            height: 65%;
+            height: 60%;
         } 
+        #whatever {
+            overflow-y: scroll;
+        }
+
     </style>
     <div class="container-fluid">
         <div class="row" style="height: 100vh">
 
-            <div class="col-md-2 bg-secondary h-100">
+            <div class="col-md-2 bg-secondary h-100" id="whatever">
                 <div class="col p-3 text-white" style="border-bottom: solid; border-color:white">
                     Activity Feed
                 </div>
                 <div class="p-3 text-black" id="ActivityFeed">
-                    VÄNSTER UNDER
+                    
                 </div>
 
                 
@@ -104,14 +108,15 @@
                             <div class="input-group-prepend">
                                 <button type="button" value="submit" class="btn btn-warning" onclick="RemoveEdge()">Remove Edge</button>
                             </div>
-                            <input type="text" name="value4" id="value4" class="form-control" placeholder="id" required
+                            <input type="text" name="value4" id="value4" class="form-control" placeholder="From Node" required>
+                            <input type="text" name="value5" id="value5" class="form-control" placeholder="To Node" required>
                         </div>
                             
                         </center>
                     </div>
                 </div>
 
-                <div class="row p-0 mt-0  bg-light" id="nodeGraph" style="border-top: solid;border-bottom: solid;border-width: 1px">
+                <div class="row p-0 mt-0 bg-light" id="nodeGraph" style="border-top: solid;border-bottom: solid;border-width: 1px">
                     <main class="w-100">
                             {% block main %}{% endblock %}
                     </main>
@@ -121,12 +126,12 @@
                     <div class="tab-content" id="nav-content">
                         {% for gateway in configured_gateways %}
                             <div class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list">
-                                id:<input type="text" id="inputId" value="{{ gateway.uuid }}"><br>
+                                uuid:<a id="inputId">{{ gateway.uuid }}</a><br>
                                 x:<input type="text" id="inputX" value="{{ gateway.x }}"><br>
                                 y:<input type="text" id="inputY" value="{{ gateway.y }}"><br>
                                 z:<input type="text" id="inputZ" value="{{ gateway.z }}"><br>
-                                ip:<input type="text" id="inputIp" value="{{ gateway.ip_adress }}"><br>
-                                <p> active:{{ gateway.active }}" </p>
+                                ip:<input type="text" id="inputIp" value="{{ gateway.ip_address }}"><br>
+                                <p> active:{{ gateway.active }} </p>
                                 <button type="button" value="submit" class="btn btn-success" onclick="UpdateInfo()">Update</button>
                             </div>
                         {% endfor %}
@@ -135,7 +140,7 @@
 
             </div>
 
-            <div class="col-md-2 bg-secondary h-100">
+            <div class="col-md-2 bg-secondary h-100" id="whatever">
                 <div class="col p-3 text-white" style="border-bottom: solid; border-color: white">
                     Objects
                 </div>
@@ -212,22 +217,27 @@
     
         function UpdateInfo(){
             // Hämtar info från det man skriver in i textrutorna, i början läggs det värdet som redan stod in i textrutan.
-            var id = document.getElementById("inputId").value,
+            var id = document.getElementById("inputId").innerHTML,
                 x = document.getElementById("inputX").value,
                 y = document.getElementById("inputY").value,
                 z = document.getElementById("inputZ").value,
-                ip = document.getElementById("inputIp").value,
-                comment = "abcd";
+                ip = document.getElementById("inputIp").value;
             console.log(id,x,y,z,ip);
     
-            $.ajax({
-                type: "POST",
-                url: "~/app/main/functions.py",
-                data: { param: text}
-            }).done(function( o ) {
-                update_gateway(id,x,y,z,ip,comment);
-                console.log("Shouldve called update_gateway() in function.py with updated info now")
-            });
+            http = new XMLHttpRequest();
+            const query = {
+                query: `mutation{
+                UpdateGateway(uuid: "`+ id +`", x: `+ x +`, y: `+ y +`, z: `+ z +`, ip_address: "`+ ip +`"){
+                        uuid
+                    }
+                }`
+            }
+            SendQuery(http, query)
+
+            http.onload = function() {
+                console.log(http.response)
+            }
+            //location.reload();
         }
     </script>
     <!-- Optional JavaScript -->

@@ -98,14 +98,14 @@ def delete_connection(fromID, toID):
 	result = requests.post(url, json=parameters)
 	return result.text
 	
-def update_gateway(id,x,y,z,ip,comment):
-    mutation = """ mutation { UpdateGateway(id: %s, x: %d, y: %d, z: %d, ip_address "%s", comment: "%s") {
-        id
-        x
-        y
-        z
-        ip_address
-        active
-        comment
-        }
-    } """ % (id,x,y,z,ip,comment)
+def update_gateway(id,x,y,z,ip):
+	print("hej")
+	mutation = """ mutation { UpdateGateway(uuid: %s, x: %d, y: %d, z: %d, ip_address "%s") {
+		id
+		x
+		y
+		z
+		ip_address
+		active
+		}
+	} """ % (id,x,y,z,ip)
