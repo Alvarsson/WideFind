@@ -41,6 +41,7 @@ var nodeCount = 0,
         edges: []
     }
 
+// Init sigma.js objektet
 s = new sigma({
     graph: g,
     container: 'graph-container',
@@ -60,6 +61,8 @@ s = new sigma({
     }
 });
 
+
+// Skapar en nodkarta från databasen varje gång hemsidan laddas
 CreateGraphFromDatabase();
 
 // ---------Testing function only---------
@@ -95,7 +98,7 @@ function SaveGraph() {
 }
 
 
-// Fetch markers from database via graphql 
+// Skicka ett graphql query till apollo
 function SendQuery(http, query) {
     const port = "4000";
     const url = "http://localhost:" + port
@@ -106,7 +109,7 @@ function SendQuery(http, query) {
     http.send(JSON.stringify(query));
 }
 
-// Create a sigma js graph from existing markers in database
+// Skapa en sigma.js graf från databasen
 function CreateGraphFromDatabase() {
     http = new XMLHttpRequest();
     const query = {
@@ -126,6 +129,7 @@ function CreateGraphFromDatabase() {
     http.onload = function() {
         markers = http.response
 
+        // Lägger först till alla markers i sigma.js listan
         for(let i = 0; i < markers["data"]["Marker"].length; i++) {
             g.nodes.push(s.graph.addNode({
                 id: "" + markers["data"]["Marker"][i]["id"],
@@ -140,6 +144,7 @@ function CreateGraphFromDatabase() {
             nodeCount = nodeCount + 1;
         }
         
+        // Lägger till ***TVÅ*** edges för varje relation i databasen. Detta betyder att en "visuell" edge i nodkartan FAKTISKT ÄR TVÅ EDGES.
         for(let i = 0; i < markers["data"]["Marker"].length; i++) {
             if (markers["data"]["Marker"][i]["neighbors"].length > 0) {
                 for(let j = 0; j < markers["data"]["Marker"][i]["neighbors"].length; j++) {
@@ -161,9 +166,9 @@ function CreateGraphFromDatabase() {
     }
 }
 
-//Function to add node to graph
+// Lägg till nod
 function AddNode() {
-    // Fetch the static counter from the database
+    // Hämta "id räknaren" för markers från databasen så vi vet vilket id vi ska ge noden
     http = new XMLHttpRequest();
     const query = {
         query: `{ 
@@ -177,6 +182,7 @@ function AddNode() {
     http.onload = function() {
         marker_counter = http.response["data"]["Static"][0]["marker_counter"];
 
+        // Lägger till noden i sigma.js
         g.nodes.push(s.graph.addNode({
             id: "" + (marker_counter + 1),
             label: 'Node ' + (marker_counter + 1),
@@ -189,7 +195,7 @@ function AddNode() {
         idcount = idcount + 1;
         nodeCount = nodeCount + 1;
         
-        // Adding a marker to the database
+        // Lägger till marker i databasen
         http = new XMLHttpRequest();
         const query2 = {
             query: `mutation { 
@@ -200,7 +206,7 @@ function AddNode() {
         }
         SendQuery(http, query2)
 
-        // Increment "marker_counter" attribute of "Static" node in neo4j
+        // Ökar "id räknaren" med 1
         http = new XMLHttpRequest();
         const query3 = {
             query: `mutation { 
@@ -218,9 +224,9 @@ function AddNode() {
     }
 }
 
-// Add edge between nodes on graph. 
+// Lägg till kant 
 function AddEdge() {
-    // Fetch the static counter from the database
+    // Hämtar "id räknaren" för kanter från databasen
     http = new XMLHttpRequest();
     const query = {
         query: `{ 
@@ -234,6 +240,7 @@ function AddEdge() {
     http.onload = function() {
         relation_counter = http.response["data"]["Static"][0]["relation_counter"];
 
+        // Lägg till kanten i sigma.js
         var fromNode = document.getElementById('value').value[0];
         var toNode = document.getElementById('value2').value[0];
         g.edges.push(s.graph.addEdge({
@@ -258,7 +265,7 @@ function AddEdge() {
         }
         SendQuery(http, query2);
 
-        // Increment "relation_counter" attribute of "Static" node in neo4j
+        // Öka "id räknaren" med 1
         http = new XMLHttpRequest();
         const query3 = {
             query: `mutation { 
@@ -275,11 +282,13 @@ function AddEdge() {
     }
 }
 
+// TA bort nod
 function RemoveNode() {
     var nodeid = document.getElementById('value3').value[0];
     s.graph.dropNode(nodeid);
     nodeCount = nodeCount -1;
 
+    // Ta bort markern från databasen
     http = new XMLHttpRequest();
     const query = {
         query: `mutation { 
@@ -304,6 +313,7 @@ function RemoveEdge() {
     var edges = s.graph.edges();
     var target_edge;
     
+    // Ta bort **DOM TVÅ KANTERNA** från sigma.js
     for(let j=0;j<edges.length;j++){
         if(edges[j]["source"]==fromNode && edges[j]["target"]==toNode || edges[j]["target"]==fromNode && edges[j]["source"]==toNode){
             target_edge = edges[j]["id"];
@@ -313,6 +323,7 @@ function RemoveEdge() {
      }
     NodeOrEdgeEvent(3);
 
+    // Ta bort **RELATIONEN (singular)** från databasen
     http = new XMLHttpRequest();
     const query = {
         query: `mutation{
@@ -326,6 +337,7 @@ function RemoveEdge() {
     s.refresh();
 }
 
+// Konfigurera en gateway = koppla en okonfad gateway med en marker
 function ConfigureGateway() {
     http = new XMLHttpRequest();
     const port = "4000";
@@ -334,6 +346,7 @@ function ConfigureGateway() {
     var gateway_uuid = document.getElementById('conf_gateway').value
     var marker_id = document.getElementById('conf_marker').value
 
+    // Lägg till "CONNECTED_GATEWAY" relationen i databasen.
     const query1 = {
         query: `mutation {
             AddMarkerGateway(from: {id: "` + marker_id + `"}, to: {uuid: "` + gateway_uuid + `"}) {
@@ -352,7 +365,7 @@ function ConfigureGateway() {
     http.responseType = 'json';
     http.send(JSON.stringify(query1));
     
-
+    // Lägg till "CONNECTED_MARKER" relationen i databasen.
     const query2 = {
         query: `mutation {
             AddGatewayMarker(from: {uuid: "` + gateway_uuid + `"}, to: {id: "` + marker_id + `"}) {
@@ -372,6 +385,7 @@ function ConfigureGateway() {
     http.responseType = 'json';
     http.send(JSON.stringify(query2));
 
+    // Sparar databasen
     SaveGraph();
 
     location.reload();

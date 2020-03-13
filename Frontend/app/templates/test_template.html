@@ -38,11 +38,10 @@
                     
                 </div>
 
-                
+                <!-- Lista med okonfigurerade gateways samt knapp och textfält för att konfigurera -->
                 <div class="col p-3 text-white" style="border-bottom: solid; border-color:white">
                     Unconfigured gateways
                 </div>
-                {% set i = 0 %}
                 <table class="table">
                     <thead>
                         <tr>
@@ -67,19 +66,20 @@
                 </div>
             </div>
             
-
             <div class="col-md">
                 <script src="testfil.html" type="text/html"></script>
                 <div class="row row-cols-4 p-3 mt-1 ml-0 mr-0">
                     <div class="col">
                         <center> 
+                        <!-- Lägg till nod knapp -->
                         <button type="button" class="btn btn-success" onclick="AddNode()">Add Node</button>
+                        <!-- Spara nodgraf -->
                         <button type="button" class="btn btn-success" onclick="SaveGraph()">Save Graph</button>
                         </center>
                     </div>
                         
+                    <!-- Lägg till kant knapp -->
                     <div class="col">
-                        <!-- INTE ALLS SNYGGT SAMT SÅ FÖRSTÖR DET FÖR SIDANS LAYOUT, DETTA KAN ELSA FIXA TILL! Det finns något som är inlagt med px som måste bort -->
                         <center> 
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -90,6 +90,8 @@
                             </div>
                         </center>
                     </div>
+
+                    <!-- Ta bort nod knapp -->
                     <div class="col">
                         <center> 
                         <div class="input-group">
@@ -102,6 +104,7 @@
                         </center>
                     </div>
 
+                    <!-- Ta bort kant knapp -->
                     <div class="col">
                         <center> 
                         <div class="input-group">
@@ -116,12 +119,14 @@
                     </div>
                 </div>
 
+                <!-- Nodgrafen -->
                 <div class="row p-0 mt-0 bg-light" id="nodeGraph" style="border-top: solid;border-bottom: solid;border-width: 1px">
                     <main class="w-100">
                             {% block main %}{% endblock %}
                     </main>
                 </div>
 
+                <!-- "Configured-gateways" informationsbar på botten av hemsidan -->
                 <div class="row mt-1 ml-0 mr-0 bg-secondary text-white">
                     <div class="tab-content" id="nav-content">
                         {% for gateway in configured_gateways %}
