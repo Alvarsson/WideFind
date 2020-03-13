@@ -78,7 +78,9 @@ function update() {
     s.refresh();
 }
 
-// Save the graph positions of each marker in the database
+// Sparar varje marker pos (x, y) i databasen. Laddas sedan in i "CreateGraphFromDatabase()". 
+// NOTERA: Denna funktion kan kallas på fler ställen där det är nödvändigt för att "automisera" processen, 
+// men för tillfället görs det huvudsakligen via knappen "save graph".
 function SaveGraph() {
     node_arr = s.graph.nodes()
 
@@ -96,7 +98,6 @@ function SaveGraph() {
         SendQuery(http, query);
     }
 }
-
 
 // Skicka ett graphql query till apollo
 function SendQuery(http, query) {
@@ -282,7 +283,7 @@ function AddEdge() {
     }
 }
 
-// TA bort nod
+// Ta bort nod
 function RemoveNode() {
     var nodeid = document.getElementById('value3').value[0];
     s.graph.dropNode(nodeid);
@@ -307,6 +308,8 @@ function RemoveNode() {
 function sendID() {
     var docsss = document.getElementById('list-id').innerHTML;
 }
+
+// Ta bort kant
 function RemoveEdge() {
     var fromNode = document.getElementById('value4').value[0];
     var toNode = document.getElementById('value5').value[0];
